@@ -21,10 +21,21 @@ vim.cmd("syntax on")
 vim.cmd("filetype plugin indent on")
 
 -- Theme setup
-require("onedarkpro").setup({
+require("onedark").setup({
   colorscheme = "onedark"
 })
 require("onedarkpro").load()
+
+--vim.cmd([[colorscheme gruvbox]])
+--vim.cmd([[colorscheme one]])          -- for vim-one
+--vim.cmd([[colorscheme dracula]])
+--vim.cmd([[colorscheme everforest]])
+--vim.cmd([[colorscheme nightfox]])
+--vim.cmd([[colorscheme OceanicNext]])
+--vim.cmd([[colorscheme catppuccin]])
+
+--require("catppuccin").setup()
+--vim.cmd([[colorscheme catppuccin]])
 
 -- ALE configuration
 vim.g.ale_disable_lsp = 1
