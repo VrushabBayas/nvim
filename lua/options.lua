@@ -35,7 +35,7 @@ vim.g.ale_linters = {
 vim.g.ale_python_ruff_executable = "ruff"
 
 -- Prettier configuration
-vim.g["prettier#autoformat"] = 0
+vim.g["prettier#autoformat"] = 1
 vim.g["prettier#config#use_config_from_proj"] = 1
 vim.g["prettier#quickfix_enabled"] = 0
 
@@ -44,7 +44,7 @@ vim.lsp.buf.execute_command({
   arguments = { vim.api.nvim_buf_get_name(0) },
 })
 vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = { "*.ts", "*.tsx", "*.js", "*.jsx" },
+  pattern = { "*.ts", "*.tsx", "*.js", "*.jsx", ".sh" },
   callback = function()
     vim.lsp.buf.format({ async = false })
   end,

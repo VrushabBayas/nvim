@@ -17,7 +17,7 @@ lspconfig.ts_ls.setup({
 
     -- Auto-organize imports before save
     vim.api.nvim_create_autocmd("BufWritePre", {
-      pattern = { "*.ts", "*.tsx", "*.js", "*.jsx" },
+      pattern = { "*.ts", "*.tsx", "*.js", "*.jsx", "*.sh" },
       callback = function()
         local params = {
           command = "_typescript.organizeImports",

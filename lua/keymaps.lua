@@ -16,7 +16,7 @@ map("n", "<leader>y", '"+y', opts)
 map("v", "<leader>y", '"+y', opts)
 map("v", "<leader>p", '"_dP', opts)
 map("n", "<leader>d", ":t.<CR>", opts)
-
+map("n", "<C-a>", "ggVG", opts)
 -- Yank word under cursor into @z and print with console.log
 map("n", "<leader>l", ":let @z = expand('<cword>')<CR>oconsole.log('[log]<C-r>z:', <C-r>z)<Esc>", {})
 
