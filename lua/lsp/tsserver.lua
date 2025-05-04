@@ -24,7 +24,14 @@ lspconfig.ts_ls.setup({
           arguments = { vim.api.nvim_buf_get_name(0) },
           title = "",
         }
-        vim.lsp.buf.execute_command(params)
+        local params = {
+          command = "_typescript.organizeImports",
+          arguments = { vim.api.nvim_buf_get_name(0) },
+        }
+        local client = vim.lsp.get_active_clients({ bufnr = 0 })[1]
+        if client then
+          client.request("workspace/executeCommand", params, nil, 0)
+        end
       end,
     })
   end,

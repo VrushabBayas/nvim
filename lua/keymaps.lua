@@ -23,7 +23,6 @@ map("n", "<leader>l", ":let @z = expand('<cword>')<CR>oconsole.log('[log]<C-r>z:
 -- Move lines up/down
 map("v", "J", ":m '>+1<CR>gv=gv", opts)
 map("v", "K", ":m '<-2<CR>gv=gv", opts)
-
 -- Telescope
 map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
 map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
@@ -33,12 +32,22 @@ map("n", "<leader>pf", "<cmd>Files<cr>", opts)
 map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opts)
 
 -- Git
-map("n", "<leader>gs", "<cmd>Git<cr>", opts)
 map("n", "<leader>gb", "<cmd>Git branch<cr>", opts)
-map("n", "<leader>gl", "<cmd>Git log --oneline --graph --decorate --parents<cr>", opts)
+map("n", "<leader>glg", "<cmd>Git log --oneline --graph --decorate --parents<cr>", opts)
 map("n", "<leader>gst", "<cmd>Git stash<cr>", opts)
 map("n", "<leader>gsa", "<cmd>Git stash apply<cr>", opts)
 map("n", "<leader>gsp", "<cmd>Git stash pop<cr>", opts)
-map("n", "<leader>gc", "<cmd>Git commit<cr>", opts)
-map("n", "<leader>ga", "<cmd>Git add .<cr>", opts)
+map("n", "<leader>gaa", "<cmd>Git add .<cr>", opts)
+map("n", "<leader>gpl", "<cmd>Git add .<cr>", opts)
 
+map("n", "<leader>z", "<cmd>LazyGit<cr>",  vim.tbl_extend("force", opts, { desc = "LazyGit: Open Lazy git" }))
+
+map("n", "<leader>gs", "<cmd>Git<cr>", vim.tbl_extend("force", opts, { desc = "Git: Status" }))
+map("n", "<leader>gbl", "<cmd>Git blame<cr>", vim.tbl_extend("force", opts, { desc = "Git: Blame" }))
+map("n", "<leader>gc", "<cmd>Git commit<cr>", vim.tbl_extend("force", opts, { desc = "Git: Commit" }))
+map("n", "<leader>gd", "<cmd>Gvdiffsplit!<cr>", vim.tbl_extend("force", opts, { desc = "Git: Diff split" }))
+map("n", "<leader>gC", "<cmd>GitConflict<cr>", vim.tbl_extend("force", opts, { desc = "Git: Resolve conflict" }))
+-- Setup merge conflict resolution helpers
+map("n", "<leader>gh", "<cmd>diffget //2<cr>", vim.tbl_extend("force", opts, { desc = "Git: Take LEFT (ours)" }))
+map("n", "<leader>gl", "<cmd>diffget //3<cr>", vim.tbl_extend("force", opts, { desc = "Git: Take RIGHT (theirs)" }))
+map("n", "<leader>gq", "<cmd>diffoff! | only<cr>", vim.tbl_extend("force", opts, { desc = "Git: Quit diff mode" }))

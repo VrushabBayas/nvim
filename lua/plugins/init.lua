@@ -26,7 +26,14 @@ require("lazy").setup({
   "L3MON4D3/LuaSnip",
   "jose-elias-alvarez/null-ls.nvim",
   { "github/copilot.vim" },
-
+-- status line 
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup()
+    end,
+  },
    -- JS / TS
   { "pangloss/vim-javascript" },
   { "mxw/vim-jsx" },
@@ -37,9 +44,16 @@ require("lazy").setup({
   { "sbdchd/neoformat" },
 
   -- Git
-  "tpope/vim-fugitive",
+   {
+    "tpope/vim-fugitive",
+    cmd = { "Git", "G", "Gdiffsplit", "Gvdiffsplit", "Gwrite" },
+    config = function()
+      require("config.fugitive")
+    end,
+  },
+  require("plugins.lazygit"),
   "lewis6991/gitsigns.nvim",
-
+  --"kdheepak/lazygit.nvim",
   -- Themes
   { "morhetz/gruvbox" },
   { "navarasu/onedark.nvim" },
@@ -53,7 +67,6 @@ require("lazy").setup({
   { "mhartington/oceanic-next" },
   { "catppuccin/nvim", name = "catppuccin" },
   { "olimorris/onedarkpro.nvim" },
-
 
   -- Productivity
   "ThePrimeagen/vim-be-good",

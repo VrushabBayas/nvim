@@ -21,20 +21,22 @@ vim.cmd("syntax on")
 vim.cmd("filetype plugin indent on")
 
 -- Theme setup
-require("onedark").setup({
-  colorscheme = "onedark"
-})
-require("onedarkpro").load()
+--require("onedark").setup({
+--  colorscheme = "onedark"
+--})
+--require("onedarkpro").load()
 
 --vim.cmd([[colorscheme gruvbox]])
 --vim.cmd([[colorscheme one]])          -- for vim-one
 --vim.cmd([[colorscheme dracula]])
 --vim.cmd([[colorscheme everforest]])
---vim.cmd([[colorscheme nightfox]])
+vim.cmd([[colorscheme nightfox]])
 --vim.cmd([[colorscheme OceanicNext]])
 --vim.cmd([[colorscheme catppuccin]])
 
---require("catppuccin").setup()
+--require("catppuccin").setup({
+--  colorscheme = "catppuccin"
+--})
 --vim.cmd([[colorscheme catppuccin]])
 
 -- ALE configuration
@@ -50,10 +52,15 @@ vim.g["prettier#autoformat"] = 1
 vim.g["prettier#config#use_config_from_proj"] = 1
 vim.g["prettier#quickfix_enabled"] = 0
 
-vim.lsp.buf.execute_command({
+local params = {
   command = "_typescript.organizeImports",
   arguments = { vim.api.nvim_buf_get_name(0) },
-})
+}
+
+local client = vim.lsp.get_clients({ bufnr = 0 })[1]
+if client then
+  client.request("workspace/executeCommand", params, nil, 0)
+end
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = { "*.ts", "*.tsx", "*.js", "*.jsx", ".sh" },
   callback = function()
