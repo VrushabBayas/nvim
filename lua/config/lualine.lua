@@ -2,7 +2,7 @@ require('lualine').setup({
   options = {
     theme = 'auto',
     icons_enabled = true,
-    component_separators = { left = '', right = '' },
+    component_separators = { left = '＞', right = '＜' },
     section_separators = { left = '', right = '' },
     disabled_filetypes = { statusline = {}, winbar = {} },
     always_divide_middle = true,
@@ -25,14 +25,14 @@ require('lualine').setup({
           unnamed = '[No Name]',
         }
       },
-     -- {
-     --   function()
-     --     local dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
-     --     return '🗂️ ' .. dir
-     --   end,
-     --   icon = '🗂️',
-     --   color = { fg = '#7aa2f7' },
-     -- },
+      {
+        function()
+          local dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
+          return ' ' .. dir
+        end,
+        icon = '🗂️',
+        color = { fg = '#7aa2f7' },
+      },
     },
     lualine_x = {
       {

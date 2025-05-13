@@ -52,15 +52,6 @@ vim.g["prettier#autoformat"] = 1
 vim.g["prettier#config#use_config_from_proj"] = 1
 vim.g["prettier#quickfix_enabled"] = 0
 
-local params = {
-  command = "_typescript.organizeImports",
-  arguments = { vim.api.nvim_buf_get_name(0) },
-}
-
-local client = vim.lsp.get_clients({ bufnr = 0 })[1]
-if client then
-  client.request("workspace/executeCommand", params, nil, 0)
-end
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = { "*.ts", "*.tsx", "*.js", "*.jsx", ".sh" },
   callback = function()
