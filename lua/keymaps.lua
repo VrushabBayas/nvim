@@ -24,8 +24,25 @@ map("n", "<leader>l", ":let @z = expand('<cword>')<CR>oconsole.log('[log]<C-r>z:
 map("v", "J", ":m '>+1<CR>gv=gv", opts)
 map("v", "K", ":m '<-2<CR>gv=gv", opts)
 -- Telescope
-map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
-map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
+map("n", "<leader>ff", function()
+  require("telescope.builtin").find_files({
+    find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "--exclude", "node_modules", "--exclude", ".git" }
+  })
+end, opts)
+map("n", "<leader>fg", function()
+  require("telescope.builtin").live_grep({
+    additional_args = function()
+      return {
+        "--glob", "!node_modules/**",
+        "--glob", "!.git/**",
+        "--glob", "!package-lock.json"
+      }
+    end,
+  })
+end, opts)
+
+--map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
+--map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
 map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
 map("n", "<C-p>", "<cmd>GFiles<cr>", opts)
 map("n", "<leader>pf", "<cmd>Files<cr>", opts)
