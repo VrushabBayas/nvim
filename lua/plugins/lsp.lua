@@ -13,12 +13,12 @@
 
         -- JavaScript/TypeScript/CSS/JSON
         null_ls.builtins.formatting.prettier.with({
-          extra_filetypes = { "json", "markdown" },
+          extra_filetypes = { "json", "markdown", "html", "css", "javascript", "typescript", "svelte" },
         }),
 
         -- Optionally enable ESLint
-        -- null_ls.builtins.diagnostics.eslint,
-        -- null_ls.builtins.code_actions.eslint,
+         null_ls.builtins.diagnostics.eslint,
+         null_ls.builtins.code_actions.eslint,
       },
       on_attach = function(client, bufnr)
         if client.supports_method("textDocument/formatting") then

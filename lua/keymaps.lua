@@ -6,17 +6,36 @@ local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 -- General
+-- Reload the Neovim config file (~/.config/nvim/init.lua)
 map("n", "<leader><CR>", ":source ~/.config/nvim/init.lua<CR>", opts)
+
+-- Save the current buffer
 map("n", "<leader>w", ":w<CR>", opts)
+
+-- Quit the current window
 map("n", "<leader>q", ":q<CR>", opts)
+
+-- Switch to the alternate file (toggle between two buffers)
 map("n", "<leader><leader>", "<C-^>", opts)
+
+-- Open a vertical split file explorer (20 columns wide)
 map("n", "<leader>pv", ":Vex 20<CR>", opts)
+
+-- Yank (copy) the entire file into the system clipboard
 map("n", "<leader>Y", 'gg"+yG', opts)
+
+-- Yank (copy) the selected text into the system clipboard (normal mode)
 map("n", "<leader>y", '"+y', opts)
-map("v", "<leader>y", '"+y', opts)
+
+-- Paste over selection without overwriting the clipboard (visual mode)
 map("v", "<leader>p", '"_dP', opts)
+
+-- Duplicate the current line by copying it below
 map("n", "<leader>d", ":t.<CR>", opts)
-map("n", "<C-a>", "ggVG", opts)
+
+-- Select the entire buffer (similar to Ctrl+A in other editors)
+map("n", "<leader>A", "ggVG", opts)
+
 -- Yank word under cursor into @z and print with console.log
 map("n", "<leader>l", ":let @z = expand('<cword>')<CR>oconsole.log('[log]<C-r>z:', <C-r>z)<Esc>", {})
 

@@ -35,7 +35,8 @@ vim.cmd([[colorscheme nightfox]])
 --vim.cmd([[colorscheme catppuccin]])
 
 --require("catppuccin").setup({
---  colorscheme = "catppuccin"
+--  colorscheme = "catppuccin",
+--  flavour = "mocha"
 --})
 --vim.cmd([[colorscheme catppuccin]])
 
@@ -50,7 +51,7 @@ vim.g.ale_python_ruff_executable = "ruff"
 -- Prettier configuration
 vim.g["prettier#autoformat"] = 1
 vim.g["prettier#config#use_config_from_proj"] = 1
-vim.g["prettier#quickfix_enabled"] = 0
+vim.g["prettier#quickfix_enabled"] = 1
 
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = { "*.ts", "*.tsx", "*.js", "*.jsx", ".sh" },
@@ -58,9 +59,9 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     vim.lsp.buf.format({ async = false })
   end,
 })
-require('lspconfig').ts_ls.setup({
-  on_attach = function(client, bufnr)
+--require('lspconfig').ts_ls.setup({
+--  on_attach = function(client, bufnr)
     -- Make sure formatting is disabled if using null-ls or prettier
-    client.server_capabilities.documentFormattingProvider = false
-  end,
-})
+--    client.server_capabilities.documentFormattingProvider = false
+--  end,
+--})
