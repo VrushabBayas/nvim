@@ -26,6 +26,7 @@ require("lazy").setup({
       })
     end,
   },
+ {'tpope/vim-commentary', event = "VeryLazy" }, 
   "nvim-lualine/lualine.nvim",
 
   -- LSP & Completion
@@ -176,7 +177,7 @@ require("lazy").setup({
     end,
   },
 
-  -- status line 
+ -- status line 
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -203,6 +204,7 @@ require("lazy").setup({
     end,
   },
   require("plugins.lazygit"),
+  require("plugins.neotree"),
   {
     "lewis6991/gitsigns.nvim",
     config = function()

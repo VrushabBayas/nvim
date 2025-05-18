@@ -54,6 +54,7 @@ map("n", "<leader>fg", function()
       return {
         "--glob", "!node_modules/**",
         "--glob", "!.git/**",
+
         "--glob", "!package-lock.json"
       }
     end,
@@ -87,3 +88,6 @@ map("n", "<leader>gC", "<cmd>GitConflict<cr>", vim.tbl_extend("force", opts, { d
 map("n", "<leader>gh", "<cmd>diffget //2<cr>", vim.tbl_extend("force", opts, { desc = "Git: Take LEFT (ours)" }))
 map("n", "<leader>gl", "<cmd>diffget //3<cr>", vim.tbl_extend("force", opts, { desc = "Git: Take RIGHT (theirs)" }))
 map("n", "<leader>gq", "<cmd>diffoff! | only<cr>", vim.tbl_extend("force", opts, { desc = "Git: Quit diff mode" }))
+
+map("n", "<leader>e", "<cmd>Neotree toggle<CR>", vim.tbl_extend("force", opts, { desc = "Toggle Neo-tree" }))
+map("n", "<leader>fe", "<cmd>Neotree focus<CR>", vim.tbl_extend("force", opts, { desc = "Focus Neo-tree" }))
