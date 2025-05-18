@@ -75,7 +75,6 @@ map("n", "<leader>gst", "<cmd>Git stash<cr>", opts)
 map("n", "<leader>gsa", "<cmd>Git stash apply<cr>", opts)
 map("n", "<leader>gsp", "<cmd>Git stash pop<cr>", opts)
 map("n", "<leader>gaa", "<cmd>Git add .<cr>", opts)
-map("n", "<leader>gpl", "<cmd>Git add .<cr>", opts)
 
 map("n", "<leader>z", "<cmd>LazyGit<cr>",  vim.tbl_extend("force", opts, { desc = "LazyGit: Open Lazy git" }))
 
