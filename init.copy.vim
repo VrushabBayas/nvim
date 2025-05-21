@@ -113,7 +113,7 @@ let g:ale_python_ruff_executable = 'ruff'
 
 
 " === PRETTIER CONFIG ===
-let g:prettier#autoformat = 0
+let g:prettier#autoformat = 1
 let g:prettier#config#use_config_from_proj = 1
 let g:prettier#quickfix_enabled = 0
 

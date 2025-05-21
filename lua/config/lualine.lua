@@ -25,14 +25,6 @@ require('lualine').setup({
           unnamed = '[No Name]',
         }
       },
-      {
-        function()
-          local dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
-          return ' ' .. dir
-        end,
-        icon = '🗂️',
-        color = { fg = '#7aa2f7' },
-      },
     },
     lualine_x = {
       {

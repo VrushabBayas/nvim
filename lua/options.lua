@@ -54,14 +54,8 @@ vim.g["prettier#config#use_config_from_proj"] = 1
 vim.g["prettier#quickfix_enabled"] = 1
 
 vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = { "*.ts", "*.tsx", "*.js", "*.jsx", ".sh" },
+  pattern = { "*.ts", "*.tsx", "*.js", "*.jsx", ".sh", "*.css" },
   callback = function()
     vim.lsp.buf.format({ async = false })
   end,
 })
---require('lspconfig').ts_ls.setup({
---  on_attach = function(client, bufnr)
-    -- Make sure formatting is disabled if using null-ls or prettier
---    client.server_capabilities.documentFormattingProvider = false
---  end,
---})

@@ -33,6 +33,9 @@ map("v", "<leader>p", '"_dP', opts)
 -- Duplicate the current line by copying it below
 map("n", "<leader>d", ":t.<CR>", opts)
 
+-- Show diagnostics in a floating window at cursor position
+map("n", "<leader>r", vim.diagnostic.open_float, opts)
+
 -- Select the entire buffer (similar to Ctrl+A in other editors)
 map("n", "<leader>A", "ggVG", opts)
 

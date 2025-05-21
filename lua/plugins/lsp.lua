@@ -13,7 +13,7 @@
 
         -- JavaScript/TypeScript/CSS/JSON
         null_ls.builtins.formatting.prettier.with({
-          extra_filetypes = { "json", "markdown", "html", "css", "javascript", "typescript", "svelte" },
+          extra_filetypes = {  "javascript", "javascriptreact", "typescript", "typescriptreact","vue", "css", "scss", "html", "json", "yaml", "markdown", "jsx", "mdx"},
         }),
 
         -- Optionally enable ESLint
