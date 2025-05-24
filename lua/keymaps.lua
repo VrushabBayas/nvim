@@ -19,7 +19,7 @@ map("n", "<leader>q", ":q<CR>", opts)
 map("n", "<leader><leader>", "<C-^>", opts)
 
 -- Open a vertical split file explorer (20 columns wide)
-map("n", "<leader>pv", ":Vex 20<CR>", opts)
+map("n", "<leader>pv", ":Vex 50<CR>", opts)
 
 -- Yank (copy) the entire file into the system clipboard
 map("n", "<leader>Y", 'gg"+yG', opts)
@@ -34,7 +34,7 @@ map("v", "<leader>p", '"_dP', opts)
 map("n", "<leader>d", ":t.<CR>", opts)
 
 -- Show diagnostics in a floating window at cursor position
-map("n", "<leader>r", vim.diagnostic.open_float, opts)
+--map("n", "<leader>r", vim.diagnostic.open_float, opts)
 
 -- Select the entire buffer (similar to Ctrl+A in other editors)
 map("n", "<leader>A", "ggVG", opts)
