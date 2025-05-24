@@ -26,11 +26,18 @@ require("lazy").setup({
       })
     end,
   },
- {'tpope/vim-commentary', event = "VeryLazy" }, 
+  {'tpope/vim-commentary', event = "VeryLazy" }, 
   "nvim-lualine/lualine.nvim",
 
   -- LSP & Completion
-  "neovim/nvim-lspconfig",
+  {
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
+      'b0o/schemastore.nvim', -- For JSON schemas
+    }
+  },
   -- Update the cmp setup in your init.lua file
   -- In your plugins/init.lua file for nvim-cmp config
   {
@@ -153,18 +160,18 @@ require("lazy").setup({
     end,
   },
   {
-  "nvimtools/none-ls.nvim",
-  config = function()
-    local null_ls = require("null-ls")  -- Import from "none-ls" now
-    null_ls.setup({
-      sources = {
-        null_ls.builtins.formatting.prettier,
-        null_ls.builtins.diagnostics.eslint,
-        null_ls.builtins.code_actions.eslint,
-      },
-    })
-  end,
-},
+    "nvimtools/none-ls.nvim",
+    config = function()
+      local null_ls = require("null-ls")  -- Import from "none-ls" now
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.formatting.prettier,
+          null_ls.builtins.diagnostics.eslint,
+          --null_ls.builtins.code_actions.eslint,
+        },
+      })
+    end,
+  },
 
   { "github/copilot.vim" },
 
@@ -177,7 +184,7 @@ require("lazy").setup({
     end,
   },
 
- -- status line 
+  -- status line 
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
