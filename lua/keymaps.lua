@@ -85,10 +85,7 @@ map("n", "<leader>gs", "<cmd>Git<cr>", vim.tbl_extend("force", opts, { desc = "G
 map("n", "<leader>gbl", "<cmd>Git blame<cr>", vim.tbl_extend("force", opts, { desc = "Git: Blame" }))
 map("n", "<leader>gc", "<cmd>Git commit<cr>", vim.tbl_extend("force", opts, { desc = "Git: Commit" }))
 map("n", "<leader>gd", "<cmd>Gvdiffsplit!<cr>", vim.tbl_extend("force", opts, { desc = "Git: Diff split" }))
-map("n", "<leader>gC", "<cmd>GitConflict<cr>", vim.tbl_extend("force", opts, { desc = "Git: Resolve conflict" }))
 -- Setup merge conflict resolution helpers
-map("n", "<leader>gh", "<cmd>diffget //2<cr>", vim.tbl_extend("force", opts, { desc = "Git: Take LEFT (ours)" }))
-map("n", "<leader>gl", "<cmd>diffget //3<cr>", vim.tbl_extend("force", opts, { desc = "Git: Take RIGHT (theirs)" }))
 map("n", "<leader>gq", "<cmd>diffoff! | only<cr>", vim.tbl_extend("force", opts, { desc = "Git: Quit diff mode" }))
 
 map("n", "<leader>e", "<cmd>Neotree toggle<CR>", vim.tbl_extend("force", opts, { desc = "Toggle Neo-tree" }))
