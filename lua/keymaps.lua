@@ -15,6 +15,18 @@ map("n", "<leader>w", ":w<CR>", opts)
 -- Quit the current window
 map("n", "<leader>q", ":q<CR>", opts)
 
+-- Scroll down and center the cursor 
+map("n", "<C-d>", "<C-d>zz", opts)
+
+-- Scroll down and center the cursor 
+map("n", "<C-u>", "<C-u>zz", opts)  
+
+-- Search next and center the cursor
+map("n", "n", "nzzzv", opts)  
+
+-- Search next and center the cursor
+map("n", "N", "Nzzzv", opts)  
+
 -- Switch to the alternate file (toggle between two buffers)
 map("n", "<leader><leader>", "<C-^>", opts)
 

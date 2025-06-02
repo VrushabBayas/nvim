@@ -209,15 +209,16 @@ lspconfig.emmet_ls.setup {
 
 -- Optional: Configure diagnostics
 vim.diagnostic.config({
-  virtual_text = {
-    prefix = '●', -- Could be '', '', 'x'
+  virtual_text = false,
+  virtual_lines ={
+    only_current_line = false,
   },
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = " ",
-      [vim.diagnostic.severity.WARN] = " ",
-      [vim.diagnostic.severity.HINT] = " ",
-      [vim.diagnostic.severity.INFO] = " ",
+      [vim.diagnostic.severity.ERROR] = "✗", -- Error sign,
+      [vim.diagnostic.severity.WARN] = "!", -- Warning signsn
+      [vim.diagnostic.severity.HINT] = "?", -- Hint sign
+      [vim.diagnostic.severity.INFO] = "ℹ️", -- Info sign
     }
   },
   underline = true,
@@ -232,3 +233,15 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     vim.lsp.buf.format({ async = false })
   end,
 })
+
+-- vim.api.nvim_create_autocmd("CursorHold", {
+--   callback = function()
+--     vim.diagnostic.open_float(nil, {
+--       focus = false,
+--       scope = "line",
+--       border = "rounded",
+--       source = "if_many"
+--     })
+--   end,
+-- })
+
