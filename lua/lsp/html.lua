@@ -41,3 +41,4 @@ lspconfig.html.setup({
     })
   end,
 })
+

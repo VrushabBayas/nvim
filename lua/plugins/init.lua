@@ -21,11 +21,37 @@ require("lazy").setup({
     config = function()
       require("nvim-treesitter.configs").setup({
         ensure_installed = { "bash", "html", "javascript", "typescript", "tsx", "css", "lua" },
-        highlight = { enable = true },
+        highlight = { enable = false },
         indent = { enable = true },
       })
     end,
   },
+  require("plugins.neotree"),
+  {
+    "vim-test/vim-test",
+    config = function()
+      -- Use tmux strategy
+
+      -- JavaScript/TypeScript specific settings
+      vim.g["test#javascript#runner"] = "jest"
+      vim.g["test#typescript#runner"] = "jest"
+
+      -- Jest specific options
+      vim.g["test#javascript#jest#options"] = "--verbose"
+      vim.g["test#typescript#jest#options"] = "--verbose"
+
+      -- Alternative runners (uncomment if needed)
+      -- vim.g["test#javascript#runner"] = "vitest"
+      -- vim.g["test#typescript#runner"] = "vitest"
+      -- vim.g["test#javascript#runner"] = "mocha"
+    end,
+  },
+  require("plugins.lazygit"),
+  -- require("plugins.rosepine"),
+  -- require("plugins.gruvbox"),
+  -- require("plugins.catppuccin"),
+  require("plugins.knightfox"),
+
   {'tpope/vim-commentary', event = "VeryLazy" }, 
   "nvim-lualine/lualine.nvim",
 
@@ -210,29 +236,25 @@ require("lazy").setup({
       require("config.fugitive")
     end,
   },
-  require("plugins.lazygit"),
-  require("plugins.neotree"),
   {
     "lewis6991/gitsigns.nvim",
     config = function()
       require("gitsigns").setup()
     end,
   },
-
-  -- Themes
-  { "morhetz/gruvbox" },
-  { "navarasu/onedark.nvim" },
-  { "folke/tokyonight.nvim" },
-  { "rakr/vim-one" },
-  { "nyoom-engineering/oxocarbon.nvim" },
-  { "ayu-theme/ayu-vim" },
-  { "dracula/vim", name = "dracula" },
-  { "sainnhe/everforest" },
-  { "EdenEast/nightfox.nvim" },
-  { "mhartington/oceanic-next" },
-  { "catppuccin/nvim", name = "catppuccin" },
-  { "olimorris/onedarkpro.nvim" },
-
+  -- themes
+  { "morhetz/gruvbox" },                          
+  { "navarasu/onedark.nvim" },                    
+  { "folke/tokyonight.nvim" },                    
+  { "rakr/vim-one" },                             
+  { "nyoom-engineering/oxocarbon.nvim" },         
+  { "ayu-theme/ayu-vim" },                        
+  { "dracula/vim", name = "dracula" },            
+  { "sainnhe/everforest" },                       
+  { "EdenEast/nightfox.nvim" },                   
+  { "mhartington/oceanic-next" },                 
+  { "catppuccin/nvim", name = "catppuccin" },     
+  { "olimorris/onedarkpro.nvim" },                            
   -- Productivity
   "ThePrimeagen/vim-be-good",
   { "junegunn/fzf", build = function() vim.fn["fzf#install"]() end },

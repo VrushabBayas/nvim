@@ -1,5 +1,6 @@
 return {
   "nvim-neo-tree/neo-tree.nvim",
+  priority = 1000, -- Load this plugin before others that depend on it
   branch = "v3.x",
   dependencies = {
     "nvim-lua/plenary.nvim",

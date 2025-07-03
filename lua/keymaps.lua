@@ -12,6 +12,9 @@ map("n", "<leader><CR>", ":source ~/.config/nvim/init.lua<CR>", opts)
 -- Save the current buffer
 map("n", "<leader>w", ":w<CR>", opts)
 
+-- Clear search highlight
+map("n", "<leader>/", ":nohlsearch<CR>", opts)
+
 -- Quit the current window
 map("n", "<leader>q", ":q<CR>", opts)
 
@@ -46,7 +49,7 @@ map("v", "<leader>p", '"_dP', opts)
 map("n", "<leader>d", ":t.<CR>", opts)
 
 -- Show diagnostics in a floating window at cursor position
---map("n", "<leader>r", vim.diagnostic.open_float, opts)
+map("n", "<leader>r", vim.diagnostic.open_float, opts)
 
 -- Select the entire buffer (similar to Ctrl+A in other editors)
 map("n", "<leader>A", "ggVG", opts)
@@ -57,6 +60,25 @@ map("n", "<leader>l", ":let @z = expand('<cword>')<CR>oconsole.log('[log]<C-r>z:
 -- Move lines up/down
 map("v", "J", ":m '>+1<CR>gv=gv", opts)
 map("v", "K", ":m '<-2<CR>gv=gv", opts)
+
+-- Keybinds to make split navigation easier.
+--  Use CTRL+<hjkl> to switch between windows
+--
+--  See `:help wincmd` for a list of all window commands
+map('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+map('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+map('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+map('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- vim-test keymaps
+vim.keymap.set("n", "<leader>tn", ":TestNearest<CR>", { desc = "Test nearest" })
+vim.keymap.set("n", "<leader>tf", ":TestFile<CR>", { desc = "Test file" })
+vim.keymap.set("n", "<leader>ts", ":TestSuite<CR>", { desc = "Test suite" })
+vim.keymap.set("n", "<leader>tl", ":TestLast<CR>", { desc = "Test last" })
+vim.keymap.set("n", "<leader>tv", ":TestVisit<CR>", { desc = "Test visit" })
+
+-- JS/TS specific - watch mode
+vim.keymap.set("n", "<leader>tw", ":TestFile --watch<CR>", { desc = "Test file watch mode" })
 -- Telescope
 map("n", "<leader>ff", function()
   require("telescope.builtin").find_files({
@@ -69,15 +91,12 @@ map("n", "<leader>fg", function()
       return {
         "--glob", "!node_modules/**",
         "--glob", "!.git/**",
-
         "--glob", "!package-lock.json"
       }
     end,
   })
 end, opts)
 
---map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
---map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
 map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
 map("n", "<C-p>", "<cmd>GFiles<cr>", opts)
 map("n", "<leader>pf", "<cmd>Files<cr>", opts)
@@ -100,5 +119,17 @@ map("n", "<leader>gd", "<cmd>Gvdiffsplit!<cr>", vim.tbl_extend("force", opts, { 
 -- Setup merge conflict resolution helpers
 map("n", "<leader>gq", "<cmd>diffoff! | only<cr>", vim.tbl_extend("force", opts, { desc = "Git: Quit diff mode" }))
 
+-- Neo-tree
 map("n", "<leader>e", "<cmd>Neotree toggle<CR>", vim.tbl_extend("force", opts, { desc = "Toggle Neo-tree" }))
 map("n", "<leader>fe", "<cmd>Neotree focus<CR>", vim.tbl_extend("force", opts, { desc = "Focus Neo-tree" }))
+
+-- Highlight when yanking (copying) text
+--  Try it with `yap` in normal mode
+--  See `:help vim.hl.on_yank()`
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when yanking (copying) text',
+  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
