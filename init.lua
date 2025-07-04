@@ -1,9 +1,58 @@
 -- ~/.config/nvim/init.lua
-require("plugins")     -- plugin manager
-require("options")     -- basic settings
-require("keymaps")     -- keybindings
-require("lsp")         -- LSP setup
-require("config.gitsigns")
-require('config.lualine')
-require('config.fugitive')
+-- Professional Neovim configuration with lazy.nvim
+-- Author: Vrushabh Bayas
 
+-- Set leader key before any plugins load
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable",
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- Load configuration
+require("vrushabhbayas.config.options")
+require("vrushabhbayas.config.keymaps")
+require("vrushabhbayas.config.autocmds")
+
+-- Initialize theme system
+require("vrushabhbayas.utils.themes").init()
+
+-- Setup lazy.nvim
+require("lazy").setup({
+  spec = {
+    { import = "vrushabhbayas.plugins" },
+  },
+  defaults = {
+    lazy = true,
+    version = false,
+  },
+  checker = {
+    enabled = true,
+    notify = false,
+  },
+  change_detection = {
+    notify = false,
+  },
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        "gzip",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      },
+    },
+  },
+})
