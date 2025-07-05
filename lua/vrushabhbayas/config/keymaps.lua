@@ -59,6 +59,47 @@ map("n", "<leader>dl", vim.diagnostic.setloclist, opts)
 -- Development utilities
 map("n", "<leader>l", ":let @z = expand('<cword>')<CR>oconsole.log('[log]<C-r>z:', <C-r>z)<Esc>", {})
 
+-- Claude Code integration
+map("n", "<leader>cc", function()
+  vim.cmd("vsplit | vertical resize 80 | terminal claude")
+end, { desc = "Open Claude Code in vertical terminal split" })
+
+map("n", "<leader>cf", function()
+  local file_content = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
+  local filename = vim.fn.expand("%:t")
+  vim.fn.setreg("+", "File: " .. filename .. "\n\n" .. file_content)
+  vim.notify("Current file copied to clipboard for Claude Code", vim.log.levels.INFO)
+end, { desc = "Copy current file to clipboard for Claude Code" })
+
+map("v", "<leader>cs", function()
+  vim.cmd('normal! "zy')
+  local selection = vim.fn.getreg("z")
+  local filename = vim.fn.expand("%:t")
+  local start_line = vim.fn.line("'<")
+  local end_line = vim.fn.line("'>")
+  vim.fn.setreg("+", "File: " .. filename .. " (lines " .. start_line .. "-" .. end_line .. ")\n\n" .. selection)
+  vim.notify("Selection copied to clipboard for Claude Code", vim.log.levels.INFO)
+end, { desc = "Copy selection to clipboard for Claude Code" })
+
+map("n", "<leader>ct", function()
+  local terms = vim.fn.filter(vim.fn.getbufinfo(), 'v:val.name =~# "term://"')
+  if #terms > 0 then
+    for _, term in ipairs(terms) do
+      local bufnr = term.bufnr
+      local wins = vim.fn.win_findbuf(bufnr)
+      if #wins > 0 then
+        vim.api.nvim_win_close(wins[1], false)
+        return
+      end
+    end
+  end
+  vim.cmd("vsplit | vertical resize 80 | terminal claude")
+end, { desc = "Toggle Claude Code vertical terminal" })
+
+map("n", "<leader>ch", function()
+  vim.cmd("split | resize 15 | terminal claude")
+end, { desc = "Open Claude Code in horizontal terminal split" })
+
 -- Auto-imports and import management
 map("n", "<leader>io", function()
   vim.lsp.buf.code_action({

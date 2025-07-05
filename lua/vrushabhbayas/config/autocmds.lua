@@ -85,3 +85,31 @@ autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
     end
   end,
 })
+
+-- Enhanced terminal settings for Claude Code integration
+local claude_terminal_group = augroup("ClaudeTerminal", { clear = true })
+autocmd("TermOpen", {
+  group = claude_terminal_group,
+  desc = "Enhanced terminal settings for Claude Code",
+  callback = function()
+    local bufname = vim.api.nvim_buf_get_name(0)
+    if bufname:match("claude") then
+      -- Optimize for Claude Code terminal
+      vim.opt_local.number = false
+      vim.opt_local.relativenumber = false
+      vim.opt_local.signcolumn = "no"
+      vim.opt_local.foldcolumn = "0"
+      vim.opt_local.scrolloff = 0
+      
+      -- Easy navigation keymaps for Claude Code terminal
+      vim.keymap.set("n", "<Esc>", "<C-\\><C-n>", { buffer = true, desc = "Exit terminal mode" })
+      vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { buffer = true, desc = "Move to left window" })
+      vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j", { buffer = true, desc = "Move to lower window" })
+      vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k", { buffer = true, desc = "Move to upper window" })
+      vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l", { buffer = true, desc = "Move to right window" })
+      
+      -- Quick paste from clipboard
+      vim.keymap.set("t", "<C-v>", "<C-\\><C-n>\"+pi", { buffer = true, desc = "Paste from clipboard" })
+    end
+  end,
+})

@@ -24,6 +24,29 @@ This is a professional Neovim configuration using Lua with a namespace-organized
 └── lazy-lock.json                   # Plugin version lock file
 ```
 
+## Essential Commands
+
+### **Configuration Development**
+- **Check config health**: `:checkhealth` - Diagnose configuration issues
+- **Plugin management**: `:Lazy` - Open lazy.nvim UI for plugin management
+- **LSP info**: `:LspInfo` - Show LSP server status and configuration
+- **Mason management**: `:Mason` - Manage LSP servers, formatters, and linters
+- **Reload config**: `<leader><CR>` - Hot reload entire configuration
+
+### **Lint and Format Commands**
+- **Format current buffer**: `<leader>f` - Format using conform.nvim with Prettier/stylua
+- **Organize imports**: `<leader>io` - Sort and organize imports (TypeScript/JavaScript)
+- **Auto-fix ESLint**: Handled automatically on save via LSP
+- **Manual format**: `:lua vim.lsp.buf.format()` - Format via LSP server
+
+### **Testing Commands**
+- **Run nearest test**: `<leader>tn` - Execute test under cursor with Jest
+- **Run file tests**: `<leader>tf` - Run all tests in current file
+- **Run test suite**: `<leader>ts` - Execute entire test suite
+- **Test with coverage**: `<leader>tc` - Run tests with coverage report
+- **Test last**: `<leader>tl` - Re-run last test command
+- **Watch mode**: `<leader>tw` - Watch current file for changes and auto-test
+
 ## Plugin Management
 
 Uses **lazy.nvim** as the package manager with professional lazy loading patterns. Plugins are organized by feature:
@@ -152,6 +175,16 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **Duplicate line**: `<leader>d` (copy current line below)
 - **Select all**: `<leader>A` (select entire file)
 
+### Claude Code Integration
+- **Open Claude Code**: `<leader>cc` (open Claude Code in vertical terminal split)
+- **Copy file to Claude**: `<leader>cf` (copy current file to clipboard for Claude Code)
+- **Copy selection to Claude**: `<leader>cs` (copy visual selection to clipboard for Claude Code)
+- **Toggle Claude terminal**: `<leader>ct` (toggle Claude Code vertical terminal window)
+- **Horizontal Claude**: `<leader>ch` (open Claude Code in horizontal terminal split)
+- **Terminal navigation**: `<C-h/j/k/l>` (navigate between windows from terminal)
+- **Quick paste**: `<C-v>` (paste from clipboard in Claude terminal)
+- **Exit terminal**: `<Esc>` (exit terminal mode to normal mode)
+
 ### Enhanced Navigation
 - **Flash jump**: `s` (enhanced search with labeled jumps)
 - **Flash treesitter**: `S` (treesitter-aware navigation)
@@ -228,6 +261,7 @@ Modern formatting is handled by **conform.nvim** with Prettier, stylua, and othe
 5. **Git workflow**: Use `<leader>z` for LazyGit or individual git commands
 6. **Diagnostics**: Use `<leader>r` for floating diagnostics and `K` for hover information
 7. **REST API testing**: Use rest.nvim for HTTP requests with syntax highlighting
+8. **Claude Code integration**: Use `<leader>cc` to open Claude Code for AI assistance and code review
 
 ## Key Customizations
 
@@ -319,3 +353,37 @@ With noice.nvim installed, the command line experience is completely modernized:
 - Enhanced message routing and filtering
 - Better integration with LSP progress and documentation
 - Modern notification system with nvim-notify
+
+## Claude Code Integration Workflow
+
+### **Seamless AI Assistance in Neovim**
+
+This configuration provides integrated Claude Code workflows for AI-powered coding assistance:
+
+### **Quick Start Claude Code Integration:**
+1. **Open Claude Code**: `<leader>cc` - Opens Claude Code in a vertical terminal split (80 columns)
+2. **Copy current file**: `<leader>cf` - Copies entire file with filename to clipboard
+3. **Copy selection**: `<leader>cs` (in visual mode) - Copies selected code with context
+4. **Toggle terminal**: `<leader>ct` - Show/hide Claude Code vertical terminal
+5. **Horizontal option**: `<leader>ch` - Opens Claude Code in horizontal split (15 lines)
+
+### **Optimal Workflow:**
+1. **Code Review**: Select problematic code with visual mode, use `<leader>cs` to copy to clipboard
+2. **Paste to Claude**: Switch to terminal (`<leader>cc`), paste with `<C-v>` 
+3. **Get suggestions**: Ask Claude Code for improvements, refactoring, or debugging help
+4. **Navigate back**: Use `<C-k>` to jump back to your code from terminal
+5. **Apply changes**: Copy Claude's suggestions and apply them to your code
+
+### **Terminal Enhancements for Claude Code:**
+- **Clean interface**: No line numbers, signs, or distractions in Claude terminal
+- **Easy navigation**: `<C-h/j/k/l>` to move between windows without leaving terminal mode
+- **Quick clipboard access**: `<C-v>` to paste clipboard content directly
+- **Smart exit**: `<Esc>` to exit terminal mode cleanly
+
+### **Best Practices:**
+- Use `<leader>cf` to give Claude Code full file context for complex issues
+- Use `<leader>cs` for specific code sections you want reviewed
+- Keep Claude Code terminal open in split for continuous assistance
+- Use `<leader>ct` to quickly show/hide when you need screen space
+
+This integration transforms Claude Code from a separate tool into a seamless coding companion within your Neovim workflow.
