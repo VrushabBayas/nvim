@@ -38,7 +38,12 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 ### **UI & Interface** (`plugins/ui.lua`)
 - **nightfox**: Professional colorscheme
 - **lualine**: Status line with git integration
-- **neo-tree**: File explorer with git status
+- **neo-tree**: File explorer with comprehensive git status, advanced mappings, and file operations
+- **bufferline**: Modern buffer tabs with advanced management
+- **fidget**: LSP progress indicators
+- **oil.nvim**: Modern file manager (edit filesystem like a buffer)
+- **nvim-colorizer**: Live color preview in CSS/config files
+- **persistence**: Session management and restoration
 - **dressing**: Enhanced UI components
 - **indent-blankline**: Visual indentation guides
 
@@ -46,9 +51,15 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **telescope**: Fuzzy finder with smart exclusions
 - **nvim-treesitter**: Syntax highlighting and text objects
 - **nvim-cmp**: Autocompletion with LSP integration
+- **flash.nvim**: Enhanced search and navigation with labels
+- **harpoon**: Quick file/project navigation
+- **todo-comments**: TODO/FIXME/NOTE highlighting and navigation
+- **nvim-ts-autotag**: Auto close/rename HTML/JSX tags
+- **neodev**: Better Lua development for Neovim configs
 - **which-key**: Keybind discovery
 - **nvim-surround**: Text object manipulation
 - **nvim-autopairs**: Automatic bracket pairing
+- **Comment.nvim**: Smart commenting
 
 ### **Git Integration** (`plugins/git.lua`)
 - **gitsigns**: Git diff indicators and hunk operations
@@ -57,9 +68,13 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **diffview**: Enhanced diff and merge conflict resolution
 
 ### **Development Tools** (`plugins/coding.lua`)
-- **vim-test**: Jest test runner with watch mode
+- **neotest**: Modern test runner with Jest integration and live results
 - **github/copilot**: AI code assistance
 - **nvim-dap**: Debugging support for Node.js/TypeScript
+- **trouble.nvim**: Better diagnostics, quickfix, and location list management
+- **conform.nvim**: Modern async formatting with Prettier, stylua, etc.
+- **nvim-ufo**: Enhanced folding with Treesitter integration
+- **nvim-bqf**: Better quickfix list with preview
 - **nvim-spectre**: Project-wide search and replace
 - **rest.nvim**: HTTP client for API testing
 
@@ -81,17 +96,25 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **Find files**: `<leader>ff` (Telescope with fd, excludes node_modules)
 - **Live grep**: `<leader>fg` (Telescope with exclusions)
 - **File explorer**: `<leader>e` (toggle Neo-tree)
+- **Reveal file**: `<leader>E` (reveal current file in Neo-tree)
+- **Focus explorer**: `<leader>fe` (focus Neo-tree)
+- **Git status explorer**: `<leader>ge` (Neo-tree git status view)
 - **Save file**: `<leader>w`
 - **Toggle buffers**: `<leader><leader>` (alternate between two buffers)
 - **Vertical explorer**: `<leader>pv` (50-column file explorer)
 - **Duplicate line**: `<leader>d` (copy current line below)
 
-### Testing
+### Testing (neotest)
 - **Test nearest**: `<leader>tn` (run test under cursor)
 - **Test file**: `<leader>tf` (run all tests in current file)
 - **Test suite**: `<leader>ts` (run entire test suite)
-- **Test watch mode**: `<leader>tw` (continuous test running)
-- **Test runner**: Jest with verbose output configured
+- **Test last**: `<leader>tl` (re-run last test)
+- **Watch mode**: `<leader>tw` (toggle watch mode for current file)
+- **Test output**: `<leader>to` (open test output window)
+- **Output panel**: `<leader>tO` (toggle output panel)
+- **Test summary**: `<leader>tt` (toggle test summary sidebar)
+- **Debug test**: `<leader>td` (debug nearest test with DAP)
+- **Test runner**: neotest with Jest integration and live results
 
 ### Git Integration
 - **Git status**: `<leader>gs`
@@ -101,29 +124,88 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 
 ### LSP Features
 - **Go to definition**: `gd`
+- **Go to references**: `gr`
+- **Go to implementation**: `gI`
+- **Go to declaration**: `gD`
+- **Type definition**: `<leader>D`
 - **Hover documentation**: `K`
-- **Rename**: `<space>rn`
-- **Code actions**: `<space>ca`
-- **Format**: `<space>f`
+- **Rename**: `<leader>rn`
+- **Code actions**: `<leader>ca`
+- **Format**: `<leader>f`
 - **Diagnostics**: `<leader>r` (opens floating window)
+
+### Import Management
+- **Organize imports**: `<leader>io` (sort and organize imports)
+- **Add missing imports**: `<leader>ai` (auto-import missing dependencies)
+- **Remove unused imports**: `<leader>ri` (clean up unused imports)
+- **Update imports**: `<leader>ui` (fix import paths)
+
+### Development Utilities
+- **Console log**: `<leader>l` (insert console.log for current word)
+- **Duplicate line**: `<leader>d` (copy current line below)
+- **Select all**: `<leader>A` (select entire file)
+
+### Enhanced Navigation
+- **Flash jump**: `s` (enhanced search with labeled jumps)
+- **Flash treesitter**: `S` (treesitter-aware navigation)
+- **Harpoon add**: `<leader>ha` (add current file to harpoon)
+- **Harpoon menu**: `<leader>hh` (toggle harpoon quick menu)
+- **Quick access**: `<leader>1-4` (jump to harpoon file 1-4)
+- **Harpoon prev/next**: `<leader>hp`/`<leader>hn`
+
+### Diagnostics & Trouble
+- **Diagnostics**: `<leader>xx` (toggle trouble diagnostics)
+- **Buffer diagnostics**: `<leader>xX` (current buffer only)
+- **Symbols**: `<leader>cs` (document symbols)
+- **LSP info**: `<leader>cl` (LSP definitions/references)
+- **TODO comments**: `<leader>xt` (all TODOs in trouble)
+- **Next/prev TODO**: `]t`/`[t`
+
+### File Management
+- **Oil.nvim**: `-` (edit parent directory as buffer)
+- **Oil float**: `<leader>-` (floating oil window)
+- **Neo-tree**: `<leader>e` (traditional file explorer)
+
+### Buffer Management
+- **Buffer tabs**: Shift+H/L (navigate buffers)
+- **Close others**: `<leader>bo` (close other buffers)
+- **Pin buffer**: `<leader>bp` (pin/unpin current buffer)
+
+### Session Management
+- **Restore session**: `<leader>qs`
+- **Last session**: `<leader>ql`
+- **Stop saving**: `<leader>qd`
+
+
+### Folding Operations
+- **Close fold**: `zc` (close fold under cursor)
+- **Open fold**: `zo` (open fold under cursor)
+- **Toggle fold**: `za` (toggle fold under cursor)
+- **Close all folds**: `zC` (close all folds recursively)
+- **Open all folds**: `zO` (open all folds recursively)
+- **Toggle all folds**: `zA` (toggle all folds recursively)
+- **Enhanced folding**: `zR`/`zM` (ufo.nvim enhanced fold operations)
+- **Debug folding**: `<leader>fd` (show current fold settings)
 
 ## Language Server Setup
 
-Comprehensive LSP setup in `lua/lsp/tsserver.lua` includes:
-- **TypeScript/JavaScript**: ts_ls server
+Comprehensive LSP setup in `lua/vrushabhbayas/plugins/lsp.lua` includes:
+- **TypeScript/JavaScript**: ts_ls server with enhanced import management
 - **ESLint**: With auto-fix on save
-- **JSON**: With schema validation
+- **JSON**: With schema validation (schemastore integration)
 - **HTML/CSS**: For web development
-- **Tailwind CSS**: For styling
-- **Emmet**: For HTML/JSX snippets
+- **Emmet**: HTML/JSX completion and snippets (emmet_ls)
+- **Markdown**: Marksman language server for documentation
+- **Bash**: bashls for shell scripting
+- **Lua**: lua_ls with Neovim-specific enhancements
 
-Auto-formatting is enabled on save for JS/TS files.
+Modern formatting is handled by **conform.nvim** with Prettier, stylua, and other formatters.
 
 ## Development Workflow
 
 1. **Opening files**: Use `<leader>ff` for fuzzy finding or `<leader>e` for file explorer
 2. **Editing**: LSP provides completion, diagnostics, and formatting
-3. **Testing**: Use `<leader>tn` for nearest test or `<leader>tf` for file tests
+3. **Testing**: Use `<leader>tn` for nearest test, `<leader>tf` for file tests, or `<leader>tt` for test summary
 4. **Git workflow**: Use `<leader>z` for LazyGit or individual git commands
 5. **Debugging**: Use `<leader>r` for diagnostics and `K` for hover information
 
@@ -142,7 +224,7 @@ Auto-formatting is enabled on save for JS/TS files.
 
 ## Theme Management
 
-**Complete theme collection with instant switching** - All 10 themes available in `plugins/themes.lua`:
+**Complete theme collection with instant switching** - All 10 themes available in `lua/vrushabhbayas/plugins/themes.lua` with utilities in `lua/vrushabhbayas/utils/themes.lua`:
 
 - **Nightfox** (default) - Professional dark theme with excellent plugin integration
 - **Catppuccin Mocha** - Warm, cozy theme with great readability

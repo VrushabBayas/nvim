@@ -130,13 +130,6 @@ map("n", "<C-p>", "<cmd>Telescope git_files<cr>", { desc = "Git files" })
 map("n", "<leader>pf", "<cmd>Telescope find_files<cr>", { desc = "Find files" })
 map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { desc = "Help tags" })
 
--- Testing keybindings (vim-test integration)
-map("n", "<leader>tn", "<cmd>TestNearest<CR>", { desc = "Test nearest" })
-map("n", "<leader>tf", "<cmd>TestFile<CR>", { desc = "Test file" })
-map("n", "<leader>ts", "<cmd>TestSuite<CR>", { desc = "Test suite" })
-map("n", "<leader>tl", "<cmd>TestLast<CR>", { desc = "Test last" })
-map("n", "<leader>tv", "<cmd>TestVisit<CR>", { desc = "Test visit" })
-map("n", "<leader>tw", "<cmd>TestFile --watch<CR>", { desc = "Test file watch mode" })
 
 -- Git workflow keybindings (Fugitive + LazyGit)
 map("n", "<leader>gs", "<cmd>Git<cr>", { desc = "Git status" })

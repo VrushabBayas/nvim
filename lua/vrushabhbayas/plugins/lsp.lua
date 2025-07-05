@@ -10,6 +10,7 @@ return {
       "hrsh7th/cmp-nvim-lsp",
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      "b0o/schemastore.nvim",
     },
     config = function()
       -- Common on_attach function for all LSP servers
@@ -26,9 +27,8 @@ return {
         map("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = bufnr, desc = "Code action" })
         map("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover" })
         map("n", "gD", vim.lsp.buf.declaration, { buffer = bufnr, desc = "Go to declaration" })
-        map("n", "<leader>f", function()
-          vim.lsp.buf.format({ async = true })
-        end, { buffer = bufnr, desc = "Format" })
+        -- Note: Formatting is now handled by conform.nvim
+        -- The <leader>f keybinding is defined in the conform.nvim configuration
       end
 
       -- Enhanced capabilities with nvim-cmp
@@ -80,6 +80,19 @@ return {
                 includeInlayFunctionLikeReturnTypeHints = true,
                 includeInlayEnumMemberValueHints = true,
               },
+            },
+          },
+        },
+        emmet_ls = {
+          filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less" },
+        },
+        marksman = {},
+        bashls = {},
+        jsonls = {
+          settings = {
+            json = {
+              schemas = require('schemastore').json.schemas(),
+              validate = { enable = true },
             },
           },
         },

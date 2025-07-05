@@ -443,6 +443,216 @@ return {
     end,
   },
 
+  -- Enhanced search and navigation
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+    },
+    config = function()
+      require("flash").setup({
+        labels = "asdfghjklqwertyuiopzxcvbnm",
+        search = {
+          multi_window = true,
+          forward = true,
+          wrap = true,
+          mode = "exact",
+          incremental = false,
+        },
+        jump = {
+          jumplist = true,
+          pos = "start",
+          history = false,
+          register = false,
+          nohlsearch = false,
+          autojump = false,
+        },
+        label = {
+          uppercase = true,
+          exclude = "",
+          current = true,
+          after = true,
+          before = false,
+          style = "overlay",
+          reuse = "lowercase",
+          distance = true,
+          min_pattern_length = 0,
+          rainbow = {
+            enabled = false,
+            shade = 5,
+          },
+        },
+        highlight = {
+          backdrop = true,
+          matches = true,
+          priority = 5000,
+          groups = {
+            match = "FlashMatch",
+            current = "FlashCurrent",
+            backdrop = "FlashBackdrop",
+            label = "FlashLabel",
+          },
+        },
+        action = nil,
+        pattern = "",
+        continue = false,
+        config = nil,
+        prompt = {
+          enabled = true,
+          prefix = { { "⚡", "FlashPromptIcon" } },
+          win_config = {
+            relative = "editor",
+            width = 1,
+            height = 1,
+            row = -1,
+            col = 0,
+            zindex = 1000,
+          },
+        },
+        remote_op = {
+          restore = false,
+          motion = false,
+        },
+      })
+    end,
+  },
+
+  -- Quick navigation (Harpoon)
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    keys = {
+      { "<leader>ha", function() require("harpoon"):list():add() end, desc = "Harpoon add file" },
+      { "<leader>hh", function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end, desc = "Harpoon quick menu" },
+      { "<leader>1", function() require("harpoon"):list():select(1) end, desc = "Harpoon to file 1" },
+      { "<leader>2", function() require("harpoon"):list():select(2) end, desc = "Harpoon to file 2" },
+      { "<leader>3", function() require("harpoon"):list():select(3) end, desc = "Harpoon to file 3" },
+      { "<leader>4", function() require("harpoon"):list():select(4) end, desc = "Harpoon to file 4" },
+      { "<leader>hp", function() require("harpoon"):list():prev() end, desc = "Harpoon prev file" },
+      { "<leader>hn", function() require("harpoon"):list():next() end, desc = "Harpoon next file" },
+    },
+    config = function()
+      require("harpoon"):setup()
+    end,
+  },
+
+  -- TODO comments highlighting
+  {
+    "folke/todo-comments.nvim",
+    cmd = { "TodoTrouble", "TodoTelescope" },
+    event = { "BufReadPost", "BufNewFile" },
+    keys = {
+      { "]t", function() require("todo-comments").jump_next() end, desc = "Next todo comment" },
+      { "[t", function() require("todo-comments").jump_prev() end, desc = "Previous todo comment" },
+      { "<leader>xt", "<cmd>TodoTrouble<cr>", desc = "Todo (Trouble)" },
+      { "<leader>xT", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme (Trouble)" },
+      { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "Todo" },
+      { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme" },
+    },
+    config = function()
+      require("todo-comments").setup({
+        signs = true,
+        sign_priority = 8,
+        keywords = {
+          FIX = {
+            icon = " ",
+            color = "error",
+            alt = { "FIXME", "BUG", "FIXIT", "ISSUE" },
+          },
+          TODO = { icon = " ", color = "info" },
+          HACK = { icon = " ", color = "warning" },
+          WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
+          PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+          NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
+          TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
+        },
+        gui_style = {
+          fg = "NONE",
+          bg = "BOLD",
+        },
+        merge_keywords = true,
+        highlight = {
+          multiline = true,
+          multiline_pattern = "^.",
+          multiline_context = 10,
+          before = "",
+          keyword = "wide",
+          after = "fg",
+          pattern = [[.*<(KEYWORDS)\s*:]],
+          comments_only = true,
+          max_line_len = 400,
+          exclude = {},
+        },
+        colors = {
+          error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
+          warning = { "DiagnosticWarn", "WarningMsg", "#FBBF24" },
+          info = { "DiagnosticInfo", "#2563EB" },
+          hint = { "DiagnosticHint", "#10B981" },
+          default = { "Identifier", "#7C3AED" },
+          test = { "Identifier", "#FF006E" },
+        },
+        search = {
+          command = "rg",
+          args = {
+            "--color=never",
+            "--no-heading",
+            "--with-filename",
+            "--line-number",
+            "--column",
+          },
+          pattern = [[\b(KEYWORDS):]],
+        },
+      })
+    end,
+  },
+
+  -- Auto tag closing for HTML/JSX
+  {
+    "windwp/nvim-ts-autotag",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    config = function()
+      require("nvim-ts-autotag").setup({
+        opts = {
+          enable_close = true,
+          enable_rename = true,
+          enable_close_on_slash = false,
+        },
+        per_filetype = {
+          ["html"] = {
+            enable_close = false,
+          },
+        },
+      })
+    end,
+  },
+
+  -- Better Lua development for Neovim
+  {
+    "folke/neodev.nvim",
+    dependencies = { "hrsh7th/nvim-cmp" },
+    ft = "lua",
+    config = function()
+      require("neodev").setup({
+        library = {
+          enabled = true,
+          runtime = true,
+          types = true,
+          plugins = true,
+        },
+        setup_jsonls = true,
+        lspconfig = true,
+        pathStrict = true,
+      })
+    end,
+  },
+
   -- Autopairs
   {
     "windwp/nvim-autopairs",
