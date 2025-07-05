@@ -56,10 +56,11 @@ vim.opt.splitbelow = true
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
--- Disable code folding - keep all code blocks open by default
-vim.opt.foldenable = false
+-- Enable code folding - keep all code blocks open by default
+vim.opt.foldenable = true
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
+vim.opt.foldcolumn = '1'
 
 -- Enable syntax and filetype detection
 vim.cmd("syntax on")

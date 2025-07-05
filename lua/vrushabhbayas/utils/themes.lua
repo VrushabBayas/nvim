@@ -36,7 +36,7 @@ M.themes = {
     cmd = "colorscheme tokyonight",
     variants = {
       night = "colorscheme tokyonight-night",
-      storm = "colorscheme tokyonight-storm", 
+      storm = "colorscheme tokyonight-storm",
       moon = "colorscheme tokyonight-moon",
       day = "colorscheme tokyonight-day",
     }
@@ -87,7 +87,7 @@ function M.save_theme(theme_name)
   local content = string.format([[-- Auto-generated theme preference
 return "%s"
 ]], theme_name)
-  
+
   local file = io.open(config_path, "w")
   if file then
     file:write(content)
@@ -157,12 +157,12 @@ function M.get_picker_data()
       preview_cmd = theme.cmd,
     })
   end
-  
+
   -- Sort by display name
   table.sort(data, function(a, b)
     return a.display_name < b.display_name
   end)
-  
+
   return data
 end
 
@@ -170,11 +170,11 @@ end
 function M.preview_theme(theme_name)
   local theme = M.themes[theme_name]
   if not theme then return end
-  
+
   if theme.setup then
     theme.setup()
   end
-  
+
   pcall(function()
     vim.cmd(theme.cmd)
   end)
@@ -185,19 +185,19 @@ function M.random_theme()
   local names = M.get_theme_names()
   local current = vim.g.colors_name
   local available = {}
-  
+
   -- Filter out current theme
   for _, name in ipairs(names) do
     if M.themes[name].cmd:match(name) ~= current then
       table.insert(available, name)
     end
   end
-  
+
   if #available == 0 then
     vim.notify("No other themes available", vim.log.levels.WARN)
     return
   end
-  
+
   math.randomseed(os.time())
   local random_theme = available[math.random(#available)]
   M.apply_theme(random_theme)
@@ -265,7 +265,7 @@ function M.telescope_picker()
       map('n', '<CR>', apply_selection)
       map('i', '<C-c>', cancel_selection)
       map('n', '<Esc>', cancel_selection)
-      
+
       -- Preview on cursor move
       map('i', '<C-j>', function()
         actions.move_selection_next(prompt_bufnr)

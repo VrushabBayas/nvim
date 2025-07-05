@@ -183,3 +183,21 @@ end, { desc = "Preview current theme" })
 map("n", "<leader>cr", function()
   require("vrushabhbayas.utils.themes").random_theme()
 end, { desc = "Random theme" })
+
+-- Additional fold keybindings for debugging and usability
+map("n", "zc", "zc", { desc = "Close fold under cursor" })
+map("n", "zo", "zo", { desc = "Open fold under cursor" })
+map("n", "za", "za", { desc = "Toggle fold under cursor" })
+map("n", "zC", "zC", { desc = "Close all folds under cursor recursively" })
+map("n", "zO", "zO", { desc = "Open all folds under cursor recursively" })
+map("n", "zA", "zA", { desc = "Toggle all folds under cursor recursively" })
+
+-- Debug folding status
+map("n", "<leader>fd", function()
+  local foldenable = vim.opt.foldenable:get()
+  local foldmethod = vim.opt.foldmethod:get()
+  local foldlevel = vim.opt.foldlevel:get()
+  local foldcolumn = vim.opt.foldcolumn:get()
+  vim.notify(string.format("Folding: %s, Method: %s, Level: %d, Column: %s", 
+    foldenable and "enabled" or "disabled", foldmethod, foldlevel, foldcolumn), vim.log.levels.INFO)
+end, { desc = "Debug fold settings" })

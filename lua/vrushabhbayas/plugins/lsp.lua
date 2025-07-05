@@ -16,11 +16,11 @@ return {
       local on_attach = function(client, bufnr)
         local map = vim.keymap.set
         local opts = { buffer = bufnr, noremap = true, silent = true }
-        
+
         -- LSP keymaps - ensure they override default vim behaviors
-        map("n", "gd", vim.lsp.buf.implementation, { buffer = bufnr, desc = "Go to implementation" })
+        map("n", "gI", vim.lsp.buf.implementation, { buffer = bufnr, desc = "Go to implementation" })
         map("n", "gr", vim.lsp.buf.references, { buffer = bufnr, desc = "Go to references" })
-        map("n", "gI", vim.lsp.buf.definition, { buffer = bufnr, desc = "Go to definition" })
+        map("n", "gd", vim.lsp.buf.definition, { buffer = bufnr, desc = "Go to definition" })
         map("n", "<leader>D", vim.lsp.buf.type_definition, { buffer = bufnr, desc = "Type definition" })
         map("n", "<leader>rn", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename" })
         map("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = bufnr, desc = "Code action" })
@@ -103,7 +103,7 @@ return {
 
       -- Setup mason to ensure servers are installed
       require("mason").setup()
-      
+
       local ensure_installed = vim.tbl_keys(servers or {})
       require("mason-lspconfig").setup({
         ensure_installed = ensure_installed,

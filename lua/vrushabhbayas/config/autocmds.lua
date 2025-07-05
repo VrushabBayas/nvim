@@ -27,8 +27,6 @@ autocmd("BufWritePre", {
   end,
 })
 
--- Auto-format removed - handled by LSP manually via <leader>f
-
 -- Auto-organize imports on save for TypeScript/JavaScript files
 local organize_imports_group = augroup("OrganizeImports", { clear = true })
 autocmd("BufWritePre", {
@@ -38,7 +36,7 @@ autocmd("BufWritePre", {
   callback = function()
     local bufnr = vim.api.nvim_get_current_buf()
     local clients = vim.lsp.get_clients({ bufnr = bufnr })
-    
+
     for _, client in ipairs(clients) do
       if client.name == "ts_ls" or client.name == "tsserver" then
         local params = {
@@ -46,10 +44,10 @@ autocmd("BufWritePre", {
           arguments = { vim.api.nvim_buf_get_name(bufnr) },
           title = ""
         }
-        
+
         -- Use synchronous request for BufWritePre to ensure completion before save
         local success, result = pcall(vim.lsp.buf_request_sync, bufnr, "workspace/executeCommand", params, 1000)
-        
+
         if success and result then
           -- Import organization completed successfully
           break
