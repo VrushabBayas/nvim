@@ -3,6 +3,78 @@
 
 return {
 
+  -- vim-test integration
+  {
+    "vim-test/vim-test",
+    keys = {
+      { "<leader>tn", ":TestNearest<CR>", desc = "Run nearest test" },
+      { "<leader>tf", ":TestFile<CR>", desc = "Run current file tests" },
+      { "<leader>ts", ":TestSuite<CR>", desc = "Run test suite" },
+      { "<leader>tl", ":TestLast<CR>", desc = "Run last test" },
+      { "<leader>tw", ":TestFile --watch<CR>", desc = "Watch current file tests" },
+      { "<leader>tc", ":TestSuite --coverage<CR>", desc = "Run tests with coverage" },
+    },
+    config = function()
+      -- Dynamic window sizing function (working version)
+      local function get_test_window_size()
+        local total_lines = vim.o.lines
+        local status_line = 1
+        local cmd_line = 1
+        local available = total_lines - status_line - cmd_line
+        -- Use 90% of available space, with minimum 20 lines and maximum 50 lines
+        local height = math.min(50, math.max(20, math.floor(available * 0.9)))
+        return height
+      end
+      
+      -- Set test strategy to use Neovim terminal with optimized positioning
+      vim.g["test#strategy"] = "neovim"
+      vim.g["test#neovim#term_position"] = "belowright " .. get_test_window_size()
+      vim.g["test#neovim#preserve_screen"] = 1
+      vim.g["test#neovim#start_normal"] = 1
+      
+      -- Configure Jest for TypeScript projects (working command)
+      vim.g["test#javascript#runner"] = "jest"
+      vim.g["test#typescript#runner"] = "jest"
+      
+      -- Working Jest command
+      local jest_cmd = "npx jest --preset=ts-jest --testEnvironment=jsdom --no-cache"
+      
+      vim.g["test#javascript#jest#executable"] = jest_cmd
+      vim.g["test#typescript#jest#executable"] = jest_cmd
+      
+      -- Optimized options for different test types
+      vim.g["test#javascript#jest#options"] = {
+        nearest = "--verbose --no-coverage",
+        file = "--verbose --no-coverage", 
+        suite = "--passWithNoTests"
+      }
+      vim.g["test#typescript#jest#options"] = {
+        nearest = "--verbose --no-coverage",
+        file = "--verbose --no-coverage",
+        suite = "--passWithNoTests"
+      }
+      
+      -- Better file pattern matching
+      vim.g["test#javascript#jest#file_pattern"] = "\\v\\.(test|spec)\\.(js|jsx|ts|tsx)$"
+      vim.g["test#typescript#jest#file_pattern"] = "\\v\\.(test|spec)\\.(js|jsx|ts|tsx)$"
+      
+      -- Enhanced terminal configuration
+      vim.api.nvim_create_autocmd("TermOpen", {
+        pattern = "*",
+        callback = function()
+          if vim.bo.filetype == "terminal" then
+            -- Easy exit from test terminal
+            vim.keymap.set("n", "q", ":q<CR>", { buffer = true, silent = true })
+            vim.keymap.set("n", "<Esc>", ":q<CR>", { buffer = true, silent = true })
+            -- Enable line numbers in terminal for better navigation
+            vim.wo.number = true
+            vim.wo.relativenumber = true
+          end
+        end,
+      })
+    end,
+  },
+
   -- GitHub Copilot
   {
     "github/copilot.vim",

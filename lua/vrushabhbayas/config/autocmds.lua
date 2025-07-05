@@ -14,48 +14,9 @@ autocmd("TextYankPost", {
   end,
 })
 
--- Remove trailing whitespace on save
-local trim_group = augroup("TrimWhitespace", { clear = true })
-autocmd("BufWritePre", {
-  group = trim_group,
-  desc = "Remove trailing whitespace on save",
-  pattern = "*",
-  callback = function()
-    local save_cursor = vim.fn.getpos(".")
-    vim.cmd([[%s/\s\+$//e]])
-    vim.fn.setpos(".", save_cursor)
-  end,
-})
+-- Whitespace trimming is handled by conform.nvim formatters
 
--- Auto-organize imports on save for TypeScript/JavaScript files
-local organize_imports_group = augroup("OrganizeImports", { clear = true })
-autocmd("BufWritePre", {
-  group = organize_imports_group,
-  desc = "Auto-organize imports on save for TypeScript/JavaScript files",
-  pattern = { "*.ts", "*.tsx", "*.js", "*.jsx" },
-  callback = function()
-    local bufnr = vim.api.nvim_get_current_buf()
-    local clients = vim.lsp.get_clients({ bufnr = bufnr })
-
-    for _, client in ipairs(clients) do
-      if client.name == "ts_ls" or client.name == "tsserver" then
-        local params = {
-          command = "_typescript.organizeImports",
-          arguments = { vim.api.nvim_buf_get_name(bufnr) },
-          title = ""
-        }
-
-        -- Use synchronous request for BufWritePre to ensure completion before save
-        local success, result = pcall(vim.lsp.buf_request_sync, bufnr, "workspace/executeCommand", params, 1000)
-
-        if success and result then
-          -- Import organization completed successfully
-          break
-        end
-      end
-    end
-  end,
-})
+-- Import organization is handled by conform.nvim in coding.lua
 
 -- Set specific options for different file types
 local filetype_group = augroup("FileTypeSettings", { clear = true })

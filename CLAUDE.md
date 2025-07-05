@@ -69,6 +69,7 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **diffview**: Enhanced diff and merge conflict resolution
 
 ### **Development Tools** (`plugins/coding.lua`)
+- **vim-test**: Professional test runner with Jest integration for TypeScript projects
 - **github/copilot**: AI code assistance with intelligent suggestions
 - **trouble.nvim**: Better diagnostics, quickfix, and location list management
 - **conform.nvim**: Modern async formatting with Prettier, stylua, and other formatters
@@ -102,6 +103,19 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **Toggle buffers**: `<leader><leader>` (alternate between two buffers)
 - **Vertical explorer**: `<leader>pv` (50-column file explorer)
 - **Duplicate line**: `<leader>d` (copy current line below)
+
+### Testing (vim-test)
+- **Test nearest**: `<leader>tn` (run test under cursor with fast bail-out)
+- **Test file**: `<leader>tf` (run all tests in current file with optimized performance)
+- **Test suite**: `<leader>ts` (run entire test suite with coverage)
+- **Test last**: `<leader>tl` (re-run last test quickly)
+- **Watch mode**: `<leader>tw` (watch current file and re-run tests on changes)
+- **Coverage**: `<leader>tc` (run tests with coverage report)
+- **Visit test**: `<leader>tv` (navigate to corresponding test file)
+- **Test runner**: vim-test with high-performance Jest integration, TypeScript support, and smart window sizing
+- **Terminal shortcuts**: `q`, `<Esc>`, `<C-c>` to close test window, `r` to re-run last test
+- **Auto-features**: Auto-scroll to bottom, auto-close on success (2s delay), responsive window sizing (85-90% height)
+- **Performance**: Multi-worker Jest execution, smart caching, bail-out on first failure for individual tests
 
 ### Search and Replace
 - **Project search**: `<leader>S` (toggle nvim-spectre for project-wide search/replace)
@@ -209,10 +223,11 @@ Modern formatting is handled by **conform.nvim** with Prettier, stylua, and othe
 
 1. **Opening files**: Use `<leader>ff` for fuzzy finding or `<leader>e` for file explorer
 2. **Editing**: LSP provides completion, diagnostics, and formatting with `<leader>f`
-3. **Search/Replace**: Use `<leader>S` for project-wide search and replace with live preview
-4. **Git workflow**: Use `<leader>z` for LazyGit or individual git commands
-5. **Diagnostics**: Use `<leader>r` for floating diagnostics and `K` for hover information
-6. **REST API testing**: Use rest.nvim for HTTP requests with syntax highlighting
+3. **Testing**: Use `<leader>tn` for nearest test, `<leader>tf` for file tests, or `<leader>tt` for test summary
+4. **Search/Replace**: Use `<leader>S` for project-wide search and replace with live preview
+5. **Git workflow**: Use `<leader>z` for LazyGit or individual git commands
+6. **Diagnostics**: Use `<leader>r` for floating diagnostics and `K` for hover information
+7. **REST API testing**: Use rest.nvim for HTTP requests with syntax highlighting
 
 ## Key Customizations
 

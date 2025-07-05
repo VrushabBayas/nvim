@@ -19,7 +19,7 @@ map("n", "<leader><CR>", function()
   vim.cmd("source ~/.config/nvim/init.lua")
   vim.notify("Config reloaded!", vim.log.levels.INFO)
 end, { desc = "Reload config" })
-map("n", "<leader>w", ":w<CR>", opts)
+map("n", "<leader>w", function() vim.cmd.write() end, { desc = "Save file", silent = true })
 map("n", "<leader>/", ":nohlsearch<CR>", opts)
 map("n", "<leader>q", ":q<CR>", opts)
 
@@ -100,10 +100,6 @@ end, { desc = "Update imports" })
 map("v", "<", "<gv", opts)
 map("v", ">", ">gv", opts)
 
--- Stay in indent mode
-map("v", "<", "<gv", opts)
-map("v", ">", ">gv", opts)
-
 -- Neo-tree keybindings handled by plugin configuration
 
 -- Telescope keybindings (restored with custom configurations)
@@ -131,19 +127,7 @@ map("n", "<leader>pf", "<cmd>Telescope find_files<cr>", { desc = "Find files" })
 map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { desc = "Help tags" })
 
 
--- Git workflow keybindings (Fugitive + LazyGit)
-map("n", "<leader>gs", "<cmd>Git<cr>", { desc = "Git status" })
-map("n", "<leader>gbl", "<cmd>Git blame<cr>", { desc = "Git blame" })
-map("n", "<leader>gc", "<cmd>Git commit<cr>", { desc = "Git commit" })
-map("n", "<leader>gd", "<cmd>Gvdiffsplit!<cr>", { desc = "Git diff split" })
-map("n", "<leader>gb", "<cmd>Git branch<cr>", { desc = "Git branch" })
-map("n", "<leader>glg", "<cmd>Git log --oneline --graph --decorate --parents<cr>", { desc = "Git log graph" })
-map("n", "<leader>gst", "<cmd>Git stash<cr>", { desc = "Git stash" })
-map("n", "<leader>gsa", "<cmd>Git stash apply<cr>", { desc = "Git stash apply" })
-map("n", "<leader>gsp", "<cmd>Git stash pop<cr>", { desc = "Git stash pop" })
-map("n", "<leader>gaa", "<cmd>Git add .<cr>", { desc = "Git add all" })
-map("n", "<leader>gq", "<cmd>diffoff! | only<cr>", { desc = "Quit diff mode" })
-map("n", "<leader>z", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
+-- Git keybindings are handled by git.lua plugin configuration
 
 -- File explorer keybinding
 map("n", "<leader>pv", ":Vex 50<CR>", { desc = "Vertical explorer" })
