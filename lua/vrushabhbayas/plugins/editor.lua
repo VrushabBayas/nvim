@@ -371,8 +371,8 @@ return {
       local wk = require("which-key")
       wk.setup({
         preset = "modern",
-        delay = 500,
-        expand = 1,
+        delay = 1000,
+        expand = 0,
         notify = false,
         replace = {
           ["<leader>"] = "SPC",
@@ -383,6 +383,7 @@ return {
           { "<leader>g", group = "git" },
           { "<leader>t", group = "test" },
           { "<leader>c", group = "colorscheme" },
+          { "<leader>sn", group = "noice" },
         },
         win = {
           border = "single",

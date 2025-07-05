@@ -31,9 +31,8 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 ### **LSP & Language Support** (`plugins/lsp.lua`)
 - **nvim-lspconfig**: LSP client configurations
 - **mason.nvim**: LSP server manager
-- **ts_ls**: TypeScript/JavaScript language server with inlay hints
-- **none-ls**: ESLint integration and diagnostics
-- **schemastore**: JSON schema validation
+- **ts_ls**: TypeScript/JavaScript language server with enhanced import management
+- **schemastore**: JSON schema validation for configuration files
 
 ### **UI & Interface** (`plugins/ui.lua`)
 - **nightfox**: Professional colorscheme
@@ -45,6 +44,8 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **nvim-colorizer**: Live color preview in CSS/config files
 - **persistence**: Session management and restoration
 - **dressing**: Enhanced UI components
+- **noice.nvim**: Modern UI for messages, command line, and popup menu
+- **nvim-notify**: Enhanced notification system with timeout and positioning
 - **indent-blankline**: Visual indentation guides
 
 ### **Editor Enhancement** (`plugins/editor.lua`)
@@ -68,15 +69,13 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **diffview**: Enhanced diff and merge conflict resolution
 
 ### **Development Tools** (`plugins/coding.lua`)
-- **neotest**: Modern test runner with Jest integration and live results
-- **github/copilot**: AI code assistance
-- **nvim-dap**: Debugging support for Node.js/TypeScript
+- **github/copilot**: AI code assistance with intelligent suggestions
 - **trouble.nvim**: Better diagnostics, quickfix, and location list management
-- **conform.nvim**: Modern async formatting with Prettier, stylua, etc.
+- **conform.nvim**: Modern async formatting with Prettier, stylua, and other formatters
 - **nvim-ufo**: Enhanced folding with Treesitter integration
-- **nvim-bqf**: Better quickfix list with preview
-- **nvim-spectre**: Project-wide search and replace
-- **rest.nvim**: HTTP client for API testing
+- **nvim-bqf**: Better quickfix list with preview and advanced navigation
+- **nvim-spectre**: Project-wide search and replace with live preview
+- **rest.nvim**: HTTP client for API testing with syntax highlighting
 
 ### **Plugin Management Commands**
 - **:Lazy**: Open lazy.nvim UI for plugin management
@@ -104,17 +103,11 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **Vertical explorer**: `<leader>pv` (50-column file explorer)
 - **Duplicate line**: `<leader>d` (copy current line below)
 
-### Testing (neotest)
-- **Test nearest**: `<leader>tn` (run test under cursor)
-- **Test file**: `<leader>tf` (run all tests in current file)
-- **Test suite**: `<leader>ts` (run entire test suite)
-- **Test last**: `<leader>tl` (re-run last test)
-- **Watch mode**: `<leader>tw` (toggle watch mode for current file)
-- **Test output**: `<leader>to` (open test output window)
-- **Output panel**: `<leader>tO` (toggle output panel)
-- **Test summary**: `<leader>tt` (toggle test summary sidebar)
-- **Debug test**: `<leader>td` (debug nearest test with DAP)
-- **Test runner**: neotest with Jest integration and live results
+### Search and Replace
+- **Project search**: `<leader>S` (toggle nvim-spectre for project-wide search/replace)
+- **Search current word**: Visual select + `<leader>sw` (search selected text)
+- **Replace in files**: Use spectre interface for safe bulk replacements
+- **Live preview**: See changes before applying them
 
 ### Git Integration
 - **Git status**: `<leader>gs`
@@ -176,6 +169,17 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **Last session**: `<leader>ql`
 - **Stop saving**: `<leader>qd`
 
+### Modern UI & Notifications (noice.nvim)
+- **Command line**: `:` now opens modern floating command interface
+- **Message history**: `<leader>snh` (show all message history)
+- **All messages**: `<leader>sna` (show all noice messages)
+- **Last message**: `<leader>snl` (show last noice message)
+- **Dismiss messages**: `<leader>snd` (dismiss all messages)
+- **Dismiss notifications**: `<leader>un` (dismiss all nvim-notify notifications)
+- **LSP documentation scroll**: `<C-f>`/`<C-b>` (scroll in hover/signature help)
+- **Enhanced notifications**: Automatic timeout, better positioning, and styling
+- **Command completion**: Modern interface with icons and better visual feedback
+
 
 ### Folding Operations
 - **Close fold**: `zc` (close fold under cursor)
@@ -204,10 +208,11 @@ Modern formatting is handled by **conform.nvim** with Prettier, stylua, and othe
 ## Development Workflow
 
 1. **Opening files**: Use `<leader>ff` for fuzzy finding or `<leader>e` for file explorer
-2. **Editing**: LSP provides completion, diagnostics, and formatting
-3. **Testing**: Use `<leader>tn` for nearest test, `<leader>tf` for file tests, or `<leader>tt` for test summary
+2. **Editing**: LSP provides completion, diagnostics, and formatting with `<leader>f`
+3. **Search/Replace**: Use `<leader>S` for project-wide search and replace with live preview
 4. **Git workflow**: Use `<leader>z` for LazyGit or individual git commands
-5. **Debugging**: Use `<leader>r` for diagnostics and `K` for hover information
+5. **Diagnostics**: Use `<leader>r` for floating diagnostics and `K` for hover information
+6. **REST API testing**: Use rest.nvim for HTTP requests with syntax highlighting
 
 ## Key Customizations
 
@@ -280,7 +285,22 @@ Modern formatting is handled by **conform.nvim** with Prettier, stylua, and othe
 
 ### **Development Workflow Integration**
 - **Project-aware configurations**: Different setups for different project types
-- **Jest integration**: Optimized for your project's test setup
-- **ESLint integration**: Respects your .eslintrc configuration
-- **Git workflow**: Comprehensive git operations and conflict resolution
-- **Debugging support**: Full DAP setup for Node.js/TypeScript projects
+- **Modern UI experience**: noice.nvim provides floating command line and enhanced messages
+- **Advanced search capabilities**: nvim-spectre for project-wide find and replace
+- **Git workflow**: Comprehensive git operations and conflict resolution with LazyGit
+- **REST API development**: Built-in HTTP client for testing APIs
+- **Enhanced file management**: Oil.nvim for buffer-like directory editing
+
+## Important Notes
+
+### **Which-key Configuration**
+- **Delay**: Set to 1000ms to prevent conflicts with rapid keystrokes
+- **Expand**: Set to 0 to reduce aggressive partial matching
+- **Group support**: Properly configured for noice (`<leader>sn`) and other plugin groups
+
+### **Command Line Experience**
+With noice.nvim installed, the command line experience is completely modernized:
+- Commands (`:`) appear in floating windows with better styling
+- Enhanced message routing and filtering
+- Better integration with LSP progress and documentation
+- Modern notification system with nvim-notify
