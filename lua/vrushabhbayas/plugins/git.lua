@@ -114,7 +114,7 @@ return {
       { "<leader>gbl", "<cmd>Git blame<cr>", desc = "Git blame" },
       { "<leader>gc", "<cmd>Git commit<cr>", desc = "Git commit" },
       { "<leader>gd", "<cmd>Gvdiffsplit!<cr>", desc = "Git diff split" },
-      { "<leader>gb", "<cmd>Git branch<cr>", desc = "Git branch" },
+      { "<leader>gB", "<cmd>Git branch<cr>", desc = "Git branch" },
       { "<leader>glg", "<cmd>Git log --oneline --graph --decorate --parents<cr>", desc = "Git log graph" },
       { "<leader>gst", "<cmd>Git stash<cr>", desc = "Git stash" },
       { "<leader>gsa", "<cmd>Git stash apply<cr>", desc = "Git stash apply" },

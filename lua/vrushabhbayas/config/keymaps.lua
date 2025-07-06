@@ -51,7 +51,7 @@ map("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 map("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 -- Diagnostics
-map("n", "<leader>r", vim.diagnostic.open_float, opts)
+map("n", "<leader>ld", vim.diagnostic.open_float, opts)
 map("n", "[d", vim.diagnostic.goto_prev, opts)
 map("n", "]d", vim.diagnostic.goto_next, opts)
 map("n", "<leader>dl", vim.diagnostic.setloclist, opts)
@@ -211,7 +211,7 @@ map("n", "zO", "zO", { desc = "Open all folds under cursor recursively" })
 map("n", "zA", "zA", { desc = "Toggle all folds under cursor recursively" })
 
 -- Debug folding status
-map("n", "<leader>fd", function()
+map("n", "<leader>fD", function()
   local foldenable = vim.opt.foldenable:get()
   local foldmethod = vim.opt.foldmethod:get()
   local foldlevel = vim.opt.foldlevel:get()

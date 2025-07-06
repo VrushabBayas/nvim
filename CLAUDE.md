@@ -17,10 +17,16 @@ This is a professional Neovim configuration using Lua with a namespace-organized
 │       │   └── autocmds.lua         # Auto-commands and events
 │       └── plugins/                 # Plugin specifications (lazy-loaded)
 │           ├── lsp.lua              # LSP, Mason, formatting & linting
-│           ├── ui.lua               # UI plugins (lualine, neo-tree, themes)
+│           ├── ui.lua               # UI module loader (imports all ui/ modules)
+│           │   ui/                  # Modular UI plugin organization
+│           │   ├── interface.lua    # Core interface (lualine, bufferline, indent-guides)
+│           │   ├── files.lua        # File management (neo-tree, oil.nvim)
+│           │   ├── messages.lua     # Messaging/notifications (noice.nvim, nvim-notify)
+│           │   └── enhancements.lua # UI utilities (icons, colorizer, persistence, dressing)
 │           ├── editor.lua           # Editor enhancements (telescope, treesitter, cmp)
 │           ├── git.lua              # Git integration (gitsigns, fugitive, lazygit)
-│           └── coding.lua           # Development tools (testing, debugging, copilot)
+│           ├── coding.lua           # Development tools (testing, debugging, copilot)
+│           └── themes.lua           # Theme management and switching
 └── lazy-lock.json                   # Plugin version lock file
 ```
 
@@ -34,7 +40,7 @@ This is a professional Neovim configuration using Lua with a namespace-organized
 - **Reload config**: `<leader><CR>` - Hot reload entire configuration
 
 ### **Lint and Format Commands**
-- **Format current buffer**: `<leader>f` - Format using conform.nvim with Prettier/stylua
+- **Format current buffer**: `<leader>lf` - Format using conform.nvim with Prettier/stylua
 - **Organize imports**: `<leader>io` - Sort and organize imports (TypeScript/JavaScript)
 - **Auto-fix ESLint**: Handled automatically on save via LSP
 - **Manual format**: `:lua vim.lsp.buf.format()` - Format via LSP server
@@ -161,8 +167,8 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **Hover documentation**: `K`
 - **Rename**: `<leader>rn`
 - **Code actions**: `<leader>ca`
-- **Format**: `<leader>f`
-- **Diagnostics**: `<leader>r` (opens floating window)
+- **Format**: `<leader>lf`
+- **Diagnostics**: `<leader>ld` (opens floating window)
 
 ### Import Management
 - **Organize imports**: `<leader>io` (sort and organize imports)
@@ -236,7 +242,7 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **Open all folds**: `zO` (open all folds recursively)
 - **Toggle all folds**: `zA` (toggle all folds recursively)
 - **Enhanced folding**: `zR`/`zM` (ufo.nvim enhanced fold operations)
-- **Debug folding**: `<leader>fd` (show current fold settings)
+- **Debug folding**: `<leader>fD` (show current fold settings)
 
 ## Language Server Setup
 
@@ -259,7 +265,7 @@ Modern formatting is handled by **conform.nvim** with Prettier, stylua, and othe
 3. **Testing**: Use `<leader>tn` for nearest test, `<leader>tf` for file tests, or `<leader>tt` for test summary
 4. **Search/Replace**: Use `<leader>S` for project-wide search and replace with live preview
 5. **Git workflow**: Use `<leader>z` for LazyGit or individual git commands
-6. **Diagnostics**: Use `<leader>r` for floating diagnostics and `K` for hover information
+6. **Diagnostics**: Use `<leader>ld` for floating diagnostics and `K` for hover information
 7. **REST API testing**: Use rest.nvim for HTTP requests with syntax highlighting
 8. **Claude Code integration**: Use `<leader>cc` to open Claude Code for AI assistance and code review
 
@@ -311,6 +317,16 @@ Modern formatting is handled by **conform.nvim** with Prettier, stylua, and othe
 - Personal namespace `vrushabhbayas` prevents conflicts
 - Clear separation between core config and plugins
 - Modular architecture allows easy customization
+
+### **Modular UI Architecture**
+The UI configuration uses a **modular organization pattern** for maintainability:
+- **`ui.lua`** - Main module loader (18 lines, imports all ui/ modules)
+- **`ui/interface.lua`** - Core interface components (lualine, bufferline, indent-guides)
+- **`ui/files.lua`** - File management tools (neo-tree, oil.nvim)
+- **`ui/messages.lua`** - Messaging system (noice.nvim with custom styling, nvim-notify)
+- **`ui/enhancements.lua`** - UI utilities (icons, colorizer, persistence, dressing)
+
+**Benefits**: Each module focuses on specific functionality, making it easy to find, modify, or extend UI components. The main ui.lua file was reduced from 777 lines to 18 lines for better maintainability.
 
 ### **Lazy Loading Strategy**
 - **Event-driven loading**: Plugins load on specific events
