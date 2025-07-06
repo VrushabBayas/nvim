@@ -81,7 +81,7 @@ map("v", "<leader>cs", function()
   vim.notify("Selection copied to clipboard for Claude Code", vim.log.levels.INFO)
 end, { desc = "Copy selection to clipboard for Claude Code" })
 
-map("n", "<leader>ct", function()
+map("n", "<leader>cT", function()
   local terms = vim.fn.filter(vim.fn.getbufinfo(), 'v:val.name =~# "term://"')
   if #terms > 0 then
     for _, term in ipairs(terms) do

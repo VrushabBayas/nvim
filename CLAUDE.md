@@ -179,7 +179,7 @@ Uses **lazy.nvim** as the package manager with professional lazy loading pattern
 - **Open Claude Code**: `<leader>cc` (open Claude Code in vertical terminal split)
 - **Copy file to Claude**: `<leader>cf` (copy current file to clipboard for Claude Code)
 - **Copy selection to Claude**: `<leader>cs` (copy visual selection to clipboard for Claude Code)
-- **Toggle Claude terminal**: `<leader>ct` (toggle Claude Code vertical terminal window)
+- **Toggle Claude terminal**: `<leader>cT` (toggle Claude Code vertical terminal window)
 - **Horizontal Claude**: `<leader>ch` (open Claude Code in horizontal terminal split)
 - **Terminal navigation**: `<C-h/j/k/l>` (navigate between windows from terminal)
 - **Quick paste**: `<C-v>` (paste from clipboard in Claude terminal)
@@ -364,7 +364,7 @@ This configuration provides integrated Claude Code workflows for AI-powered codi
 1. **Open Claude Code**: `<leader>cc` - Opens Claude Code in a vertical terminal split (80 columns)
 2. **Copy current file**: `<leader>cf` - Copies entire file with filename to clipboard
 3. **Copy selection**: `<leader>cs` (in visual mode) - Copies selected code with context
-4. **Toggle terminal**: `<leader>ct` - Show/hide Claude Code vertical terminal
+4. **Toggle terminal**: `<leader>cT` - Show/hide Claude Code vertical terminal
 5. **Horizontal option**: `<leader>ch` - Opens Claude Code in horizontal split (15 lines)
 
 ### **Optimal Workflow:**
@@ -384,6 +384,6 @@ This configuration provides integrated Claude Code workflows for AI-powered codi
 - Use `<leader>cf` to give Claude Code full file context for complex issues
 - Use `<leader>cs` for specific code sections you want reviewed
 - Keep Claude Code terminal open in split for continuous assistance
-- Use `<leader>ct` to quickly show/hide when you need screen space
+- Use `<leader>cT` to quickly show/hide when you need screen space
 
 This integration transforms Claude Code from a separate tool into a seamless coding companion within your Neovim workflow.

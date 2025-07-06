@@ -1,2 +1,2 @@
 -- Auto-generated theme preference
-return "dracula"
+return "rose-pine"
