@@ -27,6 +27,28 @@ return {
         map("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = bufnr, desc = "Code action" })
         map("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover" })
         map("n", "gD", vim.lsp.buf.declaration, { buffer = bufnr, desc = "Go to declaration" })
+        
+        -- Python-specific LSP keymaps
+        if client.name == "pyright" then
+          map("n", "<leader>io", function()
+            vim.lsp.buf.code_action({
+              filter = function(action)
+                return action.title:match("Organize Imports") or action.title:match("Sort imports")
+              end,
+              apply = true,
+            })
+          end, { buffer = bufnr, desc = "Organize imports" })
+          
+          map("n", "<leader>ai", function()
+            vim.lsp.buf.code_action({
+              filter = function(action)
+                return action.title:match("Add import") or action.title:match("Import")
+              end,
+              apply = true,
+            })
+          end, { buffer = bufnr, desc = "Add missing import" })
+        end
+        
         -- Note: Formatting is now handled by conform.nvim
         -- The <leader>f keybinding is defined in the conform.nvim configuration
       end
@@ -88,6 +110,24 @@ return {
         },
         marksman = {},
         bashls = {},
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                typeCheckingMode = "basic",
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+                autoImportCompletions = true,
+                diagnosticMode = "workspace",
+                stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs",
+              },
+              -- Use virtual environment if available, otherwise use system python
+              pythonPath = vim.env.VIRTUAL_ENV and vim.env.VIRTUAL_ENV .. "/bin/python" or vim.fn.exepath("python3"),
+              venvPath = vim.env.VIRTUAL_ENV and vim.fn.fnamemodify(vim.env.VIRTUAL_ENV, ":h") or nil,
+              venv = vim.env.VIRTUAL_ENV and vim.fn.fnamemodify(vim.env.VIRTUAL_ENV, ":t") or nil,
+            },
+          },
+        },
         jsonls = {
           settings = {
             json = {

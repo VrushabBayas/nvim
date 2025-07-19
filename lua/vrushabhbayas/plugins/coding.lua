@@ -3,6 +3,32 @@
 
 return {
 
+  -- Python virtual environment selector
+  {
+    "linux-cultist/venv-selector.nvim",
+    dependencies = { "neovim/nvim-lspconfig", "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap-python" },
+    branch = "regexp",
+    ft = "python",
+    keys = {
+      { "<leader>vs", "<cmd>VenvSelect<cr>", desc = "Select Python venv" },
+      { "<leader>vc", "<cmd>VenvSelectCached<cr>", desc = "Select cached venv" },
+    },
+    config = function()
+      require("venv-selector").setup({
+        -- Auto select venv when opening Python files
+        auto_refresh = true,
+        search_venv_managers = true,
+        search_workspace = true,
+        -- Support for various venv managers
+        anaconda_base_path = vim.fn.expand("~/anaconda3"),
+        anaconda_envs_path = vim.fn.expand("~/anaconda3/envs"),
+        poetry_path = vim.fn.expand("~/.cache/pypoetry/virtualenvs"),
+        pipenv_path = vim.fn.expand("~/.local/share/virtualenvs"),
+        pyenv_path = vim.fn.expand("~/.pyenv/versions"),
+      })
+    end,
+  },
+
   -- vim-test integration
   {
     "vim-test/vim-test",
@@ -57,6 +83,16 @@ return {
       -- Better file pattern matching
       vim.g["test#javascript#jest#file_pattern"] = "\\v\\.(test|spec)\\.(js|jsx|ts|tsx)$"
       vim.g["test#typescript#jest#file_pattern"] = "\\v\\.(test|spec)\\.(js|jsx|ts|tsx)$"
+      
+      -- Python testing configuration
+      vim.g["test#python#runner"] = "pytest"
+      vim.g["test#python#pytest#executable"] = "python -m pytest"
+      vim.g["test#python#pytest#options"] = {
+        nearest = "--verbose -s",
+        file = "--verbose",
+        suite = "--verbose --tb=short"
+      }
+      vim.g["test#python#pytest#file_pattern"] = "\\v(test_.*|.*_test)\\.py$"
       
       -- Enhanced terminal configuration
       vim.api.nvim_create_autocmd("TermOpen", {
@@ -280,6 +316,8 @@ return {
           markdown = { "prettier" },
           yaml = { "prettier" },
           sh = { "shfmt" },
+          python = { "ruff_format", "ruff_organize_imports" },
+          -- Alternative: python = { "black", "isort" },
         },
         format_on_save = {
           timeout_ms = 500,
@@ -433,6 +471,114 @@ return {
         is_open_target_win = true,
         is_insert_mode = false,
       })
+    end,
+  },
+
+  -- Debug Adapter Protocol
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      -- UI for nvim-dap
+      {
+        "rcarriga/nvim-dap-ui",
+        dependencies = { "nvim-neotest/nvim-nio" },
+        config = function()
+          local dap, dapui = require("dap"), require("dapui")
+          
+          dapui.setup({
+            controls = {
+              element = "repl",
+              enabled = true,
+              icons = {
+                disconnect = "",
+                pause = "",
+                play = "",
+                run_last = "",
+                step_back = "",
+                step_into = "",
+                step_out = "",
+                step_over = "",
+                terminate = ""
+              }
+            },
+            layouts = {
+              {
+                elements = {
+                  { id = "scopes", size = 0.25 },
+                  { id = "breakpoints", size = 0.25 },
+                  { id = "stacks", size = 0.25 },
+                  { id = "watches", size = 0.25 }
+                },
+                position = "left",
+                size = 40
+              },
+              {
+                elements = {
+                  { id = "repl", size = 0.5 },
+                  { id = "console", size = 0.5 }
+                },
+                position = "bottom",
+                size = 10
+              }
+            }
+          })
+          
+          -- Auto-open/close dapui
+          dap.listeners.after.event_initialized["dapui_config"] = function()
+            dapui.open()
+          end
+          dap.listeners.before.event_terminated["dapui_config"] = function()
+            dapui.close()
+          end
+          dap.listeners.before.event_exited["dapui_config"] = function()
+            dapui.close()
+          end
+        end,
+      },
+      
+      -- Python DAP extension
+      {
+        "mfussenegger/nvim-dap-python",
+        ft = "python",
+        config = function()
+          -- Setup debugpy (installed via Mason)
+          local mason_path = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
+          if vim.fn.filereadable(mason_path) == 1 then
+            require("dap-python").setup(mason_path)
+          else
+            -- Fallback to system python with debugpy
+            require("dap-python").setup("python")
+          end
+        end,
+      },
+    },
+    keys = {
+      -- Debug keymaps
+      { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle breakpoint" },
+      { "<leader>dc", function() require("dap").continue() end, desc = "Continue debugging" },
+      { "<leader>di", function() require("dap").step_into() end, desc = "Step into" },
+      { "<leader>do", function() require("dap").step_over() end, desc = "Step over" },
+      { "<leader>dO", function() require("dap").step_out() end, desc = "Step out" },
+      { "<leader>dr", function() require("dap").repl.open() end, desc = "Open REPL" },
+      { "<leader>dl", function() require("dap").run_last() end, desc = "Run last" },
+      { "<leader>dt", function() require("dap").terminate() end, desc = "Terminate" },
+      { "<leader>du", function() require("dapui").toggle() end, desc = "Toggle DAP UI" },
+      { "<leader>de", function() require("dapui").eval() end, desc = "Evaluate expression", mode = {"n", "v"} },
+      
+      -- Python-specific debug keymaps
+      { "<leader>dn", function() require("dap-python").test_method() end, desc = "Debug nearest test", ft = "python" },
+      { "<leader>df", function() require("dap-python").test_class() end, desc = "Debug test class", ft = "python" },
+      { "<leader>ds", function() require("dap-python").debug_selection() end, desc = "Debug selection", mode = "v", ft = "python" },
+    },
+    config = function()
+      local dap = require("dap")
+      
+      -- Configure signs
+      vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticSignError" })
+      vim.fn.sign_define("DapBreakpointCondition", { text = "◆", texthl = "DiagnosticSignWarn" })
+      vim.fn.sign_define("DapLogPoint", { text = "◆", texthl = "DiagnosticSignInfo" })
+      vim.fn.sign_define("DapStopped", { text = "→", texthl = "DiagnosticSignWarn", linehl = "Visual" })
+      vim.fn.sign_define("DapBreakpointRejected", { text = "○", texthl = "DiagnosticSignHint" })
     end,
   },
 }

@@ -74,6 +74,20 @@ M.themes = {
       vim.opt.background = "light"
     end,
   },
+  
+  -- New & Emerging Themes 2025
+  obscure = {
+    name = "obscure",
+    display_name = "Obscure",
+    description = "Dark theme with LSP, Tree-sitter support - new 2025",
+    cmd = "colorscheme obscure",
+  },
+  rusty = {
+    name = "rusty",
+    display_name = "Rusty",
+    description = "Tomorrow Night inspired, comfort-focused - new 2025",
+    cmd = "colorscheme rusty",
+  },
 }
 
 -- Get the config file path for storing theme preference
