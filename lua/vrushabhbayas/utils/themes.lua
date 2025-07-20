@@ -11,7 +11,6 @@ M.themes = {
     description = "Professional dark theme with excellent plugin integration",
     cmd = "colorscheme nightfox",
     variants = {
-      nightfox = "colorscheme nightfox",
       dawnfox = "colorscheme dawnfox",
       dayfox = "colorscheme dayfox", 
       duskfox = "colorscheme duskfox",
@@ -37,6 +36,10 @@ M.themes = {
     display_name = "Gruvbox",
     description = "Retro groove color scheme with hard contrast",
     cmd = "colorscheme gruvbox",
+    variants = {
+      dark = "colorscheme gruvbox",
+      light = "set background=light | colorscheme gruvbox",
+    }
   },
   ["rose-pine"] = {
     name = "rose-pine",
@@ -87,6 +90,11 @@ M.themes = {
     display_name = "Everforest",
     description = "Green based color scheme designed to be warm and soft",
     cmd = "colorscheme everforest",
+    variants = {
+      hard = "let g:everforest_background = 'hard' | colorscheme everforest",
+      medium = "let g:everforest_background = 'medium' | colorscheme everforest",
+      soft = "let g:everforest_background = 'soft' | colorscheme everforest",
+    }
   },
   oceanic = {
     name = "OceanicNext",
@@ -122,7 +130,6 @@ M.themes = {
     description = "Monochrome theme that's soft on the eyes",
     cmd = "colorscheme lackluster",
     variants = {
-      lackluster = "colorscheme lackluster",
       hack = "colorscheme lackluster-hack",
       mint = "colorscheme lackluster-mint",
     }
@@ -133,8 +140,8 @@ M.themes = {
     description = "Dark+/Light+ theme from VS Code",
     cmd = "colorscheme vscode",
     variants = {
-      dark = "lua require('vscode').setup({}) vim.cmd('colorscheme vscode')",
-      light = "lua require('vscode').setup({}) vim.opt.background='light' vim.cmd('colorscheme vscode')",
+      dark = "colorscheme vscode",
+      light = "set background=light | colorscheme vscode",
     }
   },
   material = {
@@ -293,44 +300,64 @@ function M.cycle_variants()
     return
   end
 
-  -- Build colorscheme to theme mapping for fast lookup
-  local colorscheme_map = {}
+  -- Find which theme family the current colorscheme belongs to
+  local current_theme = nil
+  local current_variant = "default"
+  
   for name, theme in pairs(M.themes) do
+    -- Check if current matches base theme
+    local base_scheme = theme.cmd:match("colorscheme (%S+)")
+    if base_scheme == current then
+      current_theme = theme
+      current_variant = "default"
+      break
+    end
+    
+    -- Check if current matches any variant
     if theme.variants then
-      -- Map base theme
-      local base_scheme = theme.cmd:match("colorscheme (%S+)")
-      if base_scheme then
-        colorscheme_map[base_scheme] = { theme = name, variant = "default", cmd = theme.cmd }
-      end
-      
-      -- Map variants
       for variant_name, variant_cmd in pairs(theme.variants) do
-        local variant_scheme = variant_cmd:match("colorscheme (%S+)")
-        if variant_scheme then
-          colorscheme_map[variant_scheme] = { theme = name, variant = variant_name, cmd = variant_cmd }
+        -- Extract colorscheme name from command (handles complex commands)
+        local variant_scheme = variant_cmd:match("colorscheme ([%w-_]+)")
+        if variant_scheme == current then
+          current_theme = theme
+          current_variant = variant_name
+          break
         end
       end
     end
+    
+    if current_theme then break end
   end
 
-  -- Find current theme info
-  local current_info = colorscheme_map[current]
-  if not current_info then
-    vim.notify("Current theme has no variants", vim.log.levels.INFO)
+  -- If no theme found with variants, check if it's a theme without variants
+  if not current_theme then
+    for name, theme in pairs(M.themes) do
+      local base_scheme = theme.cmd:match("colorscheme (%S+)")
+      if base_scheme == current and not theme.variants then
+        vim.notify(string.format("%s has no variants to cycle through", theme.display_name), vim.log.levels.INFO)
+        return
+      end
+    end
+    vim.notify("Current theme not found in configuration", vim.log.levels.WARN)
+    return
+  end
+
+  -- If theme has no variants, inform user
+  if not current_theme.variants or next(current_theme.variants) == nil then
+    vim.notify(string.format("%s has no variants to cycle through", current_theme.display_name), vim.log.levels.INFO)
     return
   end
 
   -- Build variant list for current theme
-  local theme = M.themes[current_info.theme]
-  local variants = { { name = "default", cmd = theme.cmd } }
-  for variant_name, variant_cmd in pairs(theme.variants) do
+  local variants = { { name = "default", cmd = current_theme.cmd } }
+  for variant_name, variant_cmd in pairs(current_theme.variants) do
     table.insert(variants, { name = variant_name, cmd = variant_cmd })
   end
 
   -- Find current position and cycle to next
   local current_pos = 1
   for i, variant in ipairs(variants) do
-    if variant.name == current_info.variant then
+    if variant.name == current_variant then
       current_pos = i
       break
     end
@@ -339,11 +366,16 @@ function M.cycle_variants()
   local next_pos = (current_pos % #variants) + 1
   local next_variant = variants[next_pos]
 
-  pcall(function()
+  -- Execute the variant command
+  local success = pcall(function()
     vim.cmd(next_variant.cmd)
   end)
 
-  vim.notify(string.format("Switched to %s (%s)", theme.display_name, next_variant.name), vim.log.levels.INFO)
+  if success then
+    vim.notify(string.format("Switched to %s (%s)", current_theme.display_name, next_variant.name), vim.log.levels.INFO)
+  else
+    vim.notify(string.format("Failed to switch to %s variant", next_variant.name), vim.log.levels.ERROR)
+  end
 end
 
 

@@ -468,11 +468,16 @@ return {
 			require("nordic").setup({
 				bold_keywords = false,
 				italic_comments = true,
-				transparent_bg = false,
+				transparent = {
+					bg = false,      -- General background transparency
+					float = false,   -- Floating window transparency
+				},
 				bright_border = false,
 				reduced_blue = true,
 				swap_backgrounds = false,
-				override = {},
+				on_highlight = function(highlights, palette)
+					-- Custom highlight overrides can be added here if needed
+				end,
 				cursorline = {
 					bold = false,
 					bold_number = true,

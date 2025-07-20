@@ -56,8 +56,50 @@ map("n", "[d", vim.diagnostic.goto_prev, opts)
 map("n", "]d", vim.diagnostic.goto_next, opts)
 map("n", "<leader>dl", vim.diagnostic.setloclist, opts)
 
--- Development utilities
-map("n", "<leader>l", ":let @z = expand('<cword>')<CR>oconsole.log('[log]<C-r>z:', <C-r>z)<Esc>", {})
+-- Development utilities - Console logging
+map("n", "<leader>cl", function()
+  local word = vim.fn.expand("<cword>")
+  if word == "" then
+    vim.notify("No word under cursor", vim.log.levels.WARN)
+    return
+  end
+  
+  local target_line = vim.fn.line(".")
+  local log_line = string.format("console.log('[log]%s:', %s)", word, word)
+  
+  -- Get current indentation
+  local current_line = vim.fn.getline(target_line)
+  local indent = current_line:match("^%s*")
+  
+  -- Insert the console.log on the next line with proper indentation
+  vim.api.nvim_buf_set_lines(0, target_line, target_line, false, {indent .. log_line})
+  
+  -- Move cursor to the newly inserted line
+  vim.api.nvim_win_set_cursor(0, {target_line + 1, #indent + #log_line})
+end, { desc = "Insert console.log for word under cursor" })
+
+map("n", "<leader>cw", function()
+  local word = vim.fn.expand("<cword>")
+  if word == "" then
+    vim.notify("No word under cursor", vim.log.levels.WARN)
+    return
+  end
+  local line = string.format("console.warn('[warn]%s:', %s)", word, word)
+  vim.cmd("normal! o" .. line)
+  vim.cmd("normal! ==")
+end, { desc = "Insert console.warn for word under cursor" })
+
+map("n", "<leader>ce", function()
+  local word = vim.fn.expand("<cword>")
+  if word == "" then
+    vim.notify("No word under cursor", vim.log.levels.WARN)
+    return
+  end
+  local line = string.format("console.error('[error]%s:', %s)", word, word)
+  vim.cmd("normal! o" .. line)
+  vim.cmd("normal! ==")
+end, { desc = "Insert console.error for word under cursor" })
+
 
 -- Claude Code integration
 map("n", "<leader>cc", function()
