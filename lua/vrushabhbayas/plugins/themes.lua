@@ -343,56 +343,155 @@ return {
 		end,
 	},
 
-	-- New & Emerging Themes 2025
-	-- Obscure (2025)
+	-- Trending Themes 2025
+	-- Kanagawa (very popular artistic theme)
 	{
-		"killitar/obscure.nvim",
+		"rebelot/kanagawa.nvim",
 		lazy = true,
 		config = function()
-			require("obscure").setup({
+			require("kanagawa").setup({
+				compile = false,
+				undercurl = true,
+				commentStyle = { italic = true },
+				functionStyle = {},
+				keywordStyle = { italic = true },
+				statementStyle = { bold = true },
+				typeStyle = {},
 				transparent = false,
-				terminal_colors = true,
-				styles = {
-					keywords = { italic = true },
-					functions = { bold = true },
-					variables = {},
-					comments = { italic = true },
-					strings = {},
-					types = { bold = true },
+				dimInactive = false,
+				terminalColors = true,
+				colors = {
+					palette = {},
+					theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
 				},
-				plugins = {
-					gitsigns = true,
-					telescope = true,
-					nvim_tree = true,
-					neo_tree = true,
-					which_key = true,
-					lsp = true,
-					treesitter = true,
-					indent_blankline = true,
-					cmp = true,
-					lualine = true,
-					barbecue = true,
-					dashboard = true,
-					bufferline = true,
-					notify = true,
-					noice = true,
-					lazy = true,
+				overrides = function(colors)
+					return {}
+				end,
+				theme = "wave", -- Load "wave" theme when 'background' option is not set
+				background = { -- map the value of 'background' option to a theme
+					dark = "wave", -- try "dragon" !
+					light = "lotus",
 				},
 			})
 		end,
 	},
 
-	-- Rusty (2025)
+	-- Lackluster (monochrome theme)
 	{
-		"armannikoyan/rusty",
+		"slugbyte/lackluster.nvim",
 		lazy = true,
 		config = function()
-			-- Rusty theme typically uses vim global variables
-			vim.g.rusty_transparent_background = false
-			vim.g.rusty_italic_comments = true
-			vim.g.rusty_italic_keywords = true
-			vim.g.rusty_bold_functions = true
-			vim.g.rusty_terminal_colors = true
+			-- Simple setup without configuration to avoid conflicts
+			require("lackluster").setup()
+		end,
+	},
+
+	-- VSCode.nvim (VS Code theme)
+	{
+		"Mofiqul/vscode.nvim",
+		lazy = true,
+		config = function()
+			require("vscode").setup({
+				transparent = false,
+				italic_comments = true,
+				disable_nvimtree_bg = true,
+				color_overrides = {},
+				group_overrides = {},
+			})
+		end,
+	},
+
+	-- Material (Google Material Design)
+	{
+		"marko-cerovac/material.nvim",
+		lazy = true,
+		config = function()
+			require("material").setup({
+				contrast = {
+					terminal = false,
+					sidebars = false,
+					floating_windows = false,
+					cursor_line = false,
+					non_current_windows = false,
+					filetypes = {},
+				},
+				styles = {
+					comments = { italic = true },
+					strings = { italic = false },
+					keywords = { italic = false },
+					functions = { bold = true },
+					variables = {},
+					operators = {},
+					types = { italic = true },
+				},
+				plugins = {
+					"dap",
+					"gitsigns",
+					"harpoon",
+					"indent-blankline",
+					"lspsaga",
+					"mini",
+					"neogit",
+					"neo-tree",
+					"nvim-cmp",
+					"nvim-navic",
+					"nvim-tree",
+					"nvim-web-devicons",
+					"telescope",
+					"trouble",
+					"which-key",
+				},
+				disable = {
+					colored_cursor = false,
+					borders = false,
+					background = false,
+					term_colors = false,
+					eob_lines = false,
+				},
+				high_visibility = {
+					lighter = false,
+					darker = false,
+				},
+				lualine_style = "default",
+				async_loading = true,
+				custom_colors = nil,
+				custom_highlights = {},
+			})
+		end,
+	},
+
+	-- Nordic (warmer Nord)
+	{
+		"AlexvZyl/nordic.nvim",
+		lazy = true,
+		config = function()
+			require("nordic").setup({
+				bold_keywords = false,
+				italic_comments = true,
+				transparent_bg = false,
+				bright_border = false,
+				reduced_blue = true,
+				swap_backgrounds = false,
+				override = {},
+				cursorline = {
+					bold = false,
+					bold_number = true,
+					theme = "dark",
+					blend = 0.85,
+				},
+				noice = {
+					style = "classic",
+				},
+				telescope = {
+					style = "classic",
+				},
+				leap = {
+					dim_backdrop = false,
+				},
+				ts_context = {
+					dark_background = true,
+				},
+			})
 		end,
 	},
 }

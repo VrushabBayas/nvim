@@ -18,7 +18,7 @@ This is a professional Neovim configuration using Lua with a namespace-organized
 │       └── plugins/                 # Plugin specifications (lazy-loaded)
 │           ├── lsp.lua              # LSP, Mason, formatting & linting
 │           ├── ui.lua               # UI module loader (imports all ui/ modules)
-│           │   ui/                  # Modular UI plugin organization
+│           ├── ui/                  # Modular UI plugin organization
 │           │   ├── interface.lua    # Core interface (lualine, bufferline, indent-guides)
 │           │   ├── files.lua        # File management (neo-tree, oil.nvim)
 │           │   ├── messages.lua     # Messaging/notifications (noice.nvim, nvim-notify)
@@ -32,374 +32,102 @@ This is a professional Neovim configuration using Lua with a namespace-organized
 
 ## Essential Commands
 
-### **Configuration Development**
+### Configuration Development
 - **Check config health**: `:checkhealth` - Diagnose configuration issues
 - **Plugin management**: `:Lazy` - Open lazy.nvim UI for plugin management
 - **LSP info**: `:LspInfo` - Show LSP server status and configuration
 - **Mason management**: `:Mason` - Manage LSP servers, formatters, and linters
 - **Reload config**: `<leader><CR>` - Hot reload entire configuration
 
-### **Lint and Format Commands**
-- **Format current buffer**: `<leader>lf` - Format using conform.nvim with Prettier/stylua
-- **Organize imports**: `<leader>io` - Sort and organize imports (TypeScript/JavaScript)
-- **Auto-fix ESLint**: Handled automatically on save via LSP
-- **Manual format**: `:lua vim.lsp.buf.format()` - Format via LSP server
-
-### **Testing Commands**
-- **Run nearest test**: `<leader>tn` - Execute test under cursor with Jest
+### Testing Commands (vim-test with Jest/pytest)
+- **Run nearest test**: `<leader>tn` - Execute test under cursor
 - **Run file tests**: `<leader>tf` - Run all tests in current file
 - **Run test suite**: `<leader>ts` - Execute entire test suite
 - **Test with coverage**: `<leader>tc` - Run tests with coverage report
 - **Test last**: `<leader>tl` - Re-run last test command
 - **Watch mode**: `<leader>tw` - Watch current file for changes and auto-test
 
-## Plugin Management
+### Lint and Format Commands
+- **Format current buffer**: `<leader>lf` - Format using conform.nvim
+- **Auto-format on save**: Enabled for supported file types via LSP
+- **Organize imports**: `<leader>io` - Sort and organize imports (TypeScript/JavaScript)
 
-Uses **lazy.nvim** as the package manager with professional lazy loading patterns. Plugins are organized by feature:
+## Key Architecture Patterns
 
-### **LSP & Language Support** (`plugins/lsp.lua`)
-- **nvim-lspconfig**: LSP client configurations
-- **mason.nvim**: LSP server manager
-- **ts_ls**: TypeScript/JavaScript language server with enhanced import management
-- **schemastore**: JSON schema validation for configuration files
+### Namespace Organization
+All configuration is under the `vrushabhbayas` namespace to prevent conflicts with other Lua modules. This follows Neovim best practices for personal configurations.
 
-### **UI & Interface** (`plugins/ui.lua`)
-- **nightfox**: Professional colorscheme
-- **lualine**: Status line with git integration
-- **neo-tree**: File explorer with comprehensive git status, advanced mappings, and file operations
-- **bufferline**: Modern buffer tabs with advanced management
-- **fidget**: LSP progress indicators
-- **oil.nvim**: Modern file manager (edit filesystem like a buffer)
-- **nvim-colorizer**: Live color preview in CSS/config files
-- **persistence**: Session management and restoration
-- **dressing**: Enhanced UI components
-- **noice.nvim**: Modern UI for messages, command line, and popup menu
-- **nvim-notify**: Enhanced notification system with timeout and positioning
-- **indent-blankline**: Visual indentation guides
+### Modular Plugin Architecture
+The UI configuration demonstrates excellent modular organization:
+- `ui.lua` serves as a loader that imports all UI submodules
+- Each UI submodule (`interface.lua`, `files.lua`, etc.) handles specific functionality
+- This pattern reduces file sizes and improves maintainability
 
-### **Editor Enhancement** (`plugins/editor.lua`)
-- **telescope**: Fuzzy finder with smart exclusions
-- **nvim-treesitter**: Syntax highlighting and text objects
-- **nvim-cmp**: Autocompletion with LSP integration
-- **flash.nvim**: Enhanced search and navigation with labels
-- **harpoon**: Quick file/project navigation
-- **todo-comments**: TODO/FIXME/NOTE highlighting and navigation
-- **nvim-ts-autotag**: Auto close/rename HTML/JSX tags
-- **neodev**: Better Lua development for Neovim configs
-- **which-key**: Keybind discovery
-- **nvim-surround**: Text object manipulation
-- **nvim-autopairs**: Automatic bracket pairing
-- **Comment.nvim**: Smart commenting
+### Lazy Loading Strategy
+Plugins are configured with specific loading triggers:
+- **Event-based**: Load on `BufReadPre`, `InsertEnter`, etc.
+- **Command-based**: Load when specific commands are invoked
+- **Filetype-based**: Load for specific file types only
+- **Key-based**: Load when keybindings are pressed
 
-### **Git Integration** (`plugins/git.lua`)
-- **gitsigns**: Git diff indicators and hunk operations
-- **vim-fugitive**: Complete Git workflow integration
-- **lazygit**: Terminal Git UI
-- **diffview**: Enhanced diff and merge conflict resolution
+### Theme System Architecture
+Complete theme management with:
+- Theme definitions in `plugins/themes.lua`
+- Utility functions in `utils/themes.lua`
+- Persistence in `theme_preference.lua`
+- Telescope picker integration for live preview
 
-### **Development Tools** (`plugins/coding.lua`)
-- **vim-test**: Professional test runner with Jest integration for TypeScript projects
-- **github/copilot**: AI code assistance with intelligent suggestions
-- **trouble.nvim**: Better diagnostics, quickfix, and location list management
-- **conform.nvim**: Modern async formatting with Prettier, stylua, and other formatters
-- **nvim-ufo**: Enhanced folding with Treesitter integration
-- **nvim-bqf**: Better quickfix list with preview and advanced navigation
-- **nvim-spectre**: Project-wide search and replace with live preview
-- **rest.nvim**: HTTP client for API testing with syntax highlighting
+## Common Development Tasks
 
-### **Plugin Management Commands**
-- **:Lazy**: Open lazy.nvim UI for plugin management
-- **:Lazy sync**: Update and install plugins
-- **:Lazy clean**: Remove unused plugins
-- **:Lazy profile**: Performance profiling
+### Adding New Plugins
+1. Create or modify appropriate file in `lua/vrushabhbayas/plugins/`
+2. Follow the lazy.nvim specification format
+3. Add appropriate lazy loading configuration
+4. Run `:Lazy sync` to install
 
-## Common Operations
+### Modifying Keymaps
+1. Edit `lua/vrushabhbayas/config/keymaps.lua`
+2. Follow the existing pattern: `map("mode", "key", "command", { desc = "Description" })`
+3. Reload with `<leader><CR>`
 
-### Configuration Management
-- **Reload config**: `<leader><CR>` (sources init.lua)
-- **Edit config**: Files are in `~/.config/nvim/`
-- **Clear search**: `<leader>/` (remove search highlighting)
-- **Quit window**: `<leader>q`
+### Adding LSP Servers
+1. Edit `lua/vrushabhbayas/plugins/lsp.lua`
+2. Add server to Mason's `ensure_installed` list
+3. Configure server in `servers` table if needed
+4. Run `:Mason` to verify installation
 
-### File Operations
-- **Find files**: `<leader>ff` (Telescope with fd, excludes node_modules)
-- **Live grep**: `<leader>fg` (Telescope with exclusions)
-- **File explorer**: `<leader>e` (toggle Neo-tree)
-- **Reveal file**: `<leader>E` (reveal current file in Neo-tree)
-- **Focus explorer**: `<leader>fe` (focus Neo-tree)
-- **Git status explorer**: `<leader>ge` (Neo-tree git status view)
-- **Save file**: `<leader>w`
-- **Toggle buffers**: `<leader><leader>` (alternate between two buffers)
-- **Vertical explorer**: `<leader>pv` (50-column file explorer)
-- **Duplicate line**: `<leader>d` (copy current line below)
+### Debugging Configuration Issues
+1. Run `:checkhealth` for general diagnostics
+2. Check `:messages` for error messages
+3. Use `:Lazy profile` to identify slow plugins
+4. Review `~/.local/state/nvim/` for logs
 
-### Testing (vim-test)
-- **Test nearest**: `<leader>tn` (run test under cursor with fast bail-out)
-- **Test file**: `<leader>tf` (run all tests in current file with optimized performance)
-- **Test suite**: `<leader>ts` (run entire test suite with coverage)
-- **Test last**: `<leader>tl` (re-run last test quickly)
-- **Watch mode**: `<leader>tw` (watch current file and re-run tests on changes)
-- **Coverage**: `<leader>tc` (run tests with coverage report)
-- **Visit test**: `<leader>tv` (navigate to corresponding test file)
-- **Test runner**: vim-test with high-performance Jest integration, TypeScript support, and smart window sizing
-- **Terminal shortcuts**: `q`, `<Esc>`, `<C-c>` to close test window, `r` to re-run last test
-- **Auto-features**: Auto-scroll to bottom, auto-close on success (2s delay), responsive window sizing (85-90% height)
-- **Performance**: Multi-worker Jest execution, smart caching, bail-out on first failure for individual tests
-
-### Search and Replace
-- **Project search**: `<leader>S` (toggle nvim-spectre for project-wide search/replace)
-- **Search current word**: Visual select + `<leader>sw` (search selected text)
-- **Replace in files**: Use spectre interface for safe bulk replacements
-- **Live preview**: See changes before applying them
-
-### Git Integration
-- **Git status**: `<leader>gs`
-- **LazyGit**: `<leader>z`
-- **Git blame**: `<leader>gbl`
-- **Git diff**: `<leader>gd`
-
-### LSP Features
-- **Go to definition**: `gd`
-- **Go to references**: `gr`
-- **Go to implementation**: `gI`
-- **Go to declaration**: `gD`
-- **Type definition**: `<leader>D`
-- **Hover documentation**: `K`
-- **Rename**: `<leader>rn`
-- **Code actions**: `<leader>ca`
-- **Format**: `<leader>lf`
-- **Diagnostics**: `<leader>ld` (opens floating window)
-
-### Import Management
-- **Organize imports**: `<leader>io` (sort and organize imports)
-- **Add missing imports**: `<leader>ai` (auto-import missing dependencies)
-- **Remove unused imports**: `<leader>ri` (clean up unused imports)
-- **Update imports**: `<leader>ui` (fix import paths)
-
-### Development Utilities
-- **Console log**: `<leader>l` (insert console.log for current word)
-- **Duplicate line**: `<leader>d` (copy current line below)
-- **Select all**: `<leader>A` (select entire file)
+## Integration Points
 
 ### Claude Code Integration
-- **Open Claude Code**: `<leader>cc` (open Claude Code in vertical terminal split)
-- **Copy file to Claude**: `<leader>cf` (copy current file to clipboard for Claude Code)
-- **Copy selection to Claude**: `<leader>cs` (copy visual selection to clipboard for Claude Code)
-- **Toggle Claude terminal**: `<leader>cT` (toggle Claude Code vertical terminal window)
-- **Horizontal Claude**: `<leader>ch` (open Claude Code in horizontal terminal split)
-- **Terminal navigation**: `<C-h/j/k/l>` (navigate between windows from terminal)
-- **Quick paste**: `<C-v>` (paste from clipboard in Claude terminal)
-- **Exit terminal**: `<Esc>` (exit terminal mode to normal mode)
+This configuration has deep Claude Code integration:
+- Terminal handling in `autocmds.lua` for optimal Claude Code experience
+- Keybindings in `keymaps.lua` for quick access (`<leader>cc`, `<leader>cf`, etc.)
+- Custom terminal settings for clean Claude Code interface
 
-### Enhanced Navigation
-- **Flash jump**: `s` (enhanced search with labeled jumps)
-- **Flash treesitter**: `S` (treesitter-aware navigation)
-- **Harpoon add**: `<leader>ha` (add current file to harpoon)
-- **Harpoon menu**: `<leader>hh` (toggle harpoon quick menu)
-- **Quick access**: `<leader>1-4` (jump to harpoon file 1-4)
-- **Harpoon prev/next**: `<leader>hp`/`<leader>hn`
+### Testing Integration
+vim-test is configured with:
+- Jest runner for JavaScript/TypeScript projects
+- Python test runner for Python projects
+- Smart window sizing and auto-close behavior
+- Terminal shortcuts for quick test re-runs
 
-### Diagnostics & Trouble
-- **Diagnostics**: `<leader>xx` (toggle trouble diagnostics)
-- **Buffer diagnostics**: `<leader>xX` (current buffer only)
-- **Symbols**: `<leader>cs` (document symbols)
-- **LSP info**: `<leader>cl` (LSP definitions/references)
-- **TODO comments**: `<leader>xt` (all TODOs in trouble)
-- **Next/prev TODO**: `]t`/`[t`
+### Git Workflow
+Comprehensive git integration through:
+- Gitsigns for inline git information
+- Fugitive for git operations
+- LazyGit for visual git interface
+- Diffview for advanced diff viewing
 
-### File Management
-- **Oil.nvim**: `-` (edit parent directory as buffer)
-- **Oil float**: `<leader>-` (floating oil window)
-- **Neo-tree**: `<leader>e` (traditional file explorer)
+## Performance Considerations
 
-### Buffer Management
-- **Buffer tabs**: Shift+H/L (navigate buffers)
-- **Close others**: `<leader>bo` (close other buffers)
-- **Pin buffer**: `<leader>bp` (pin/unpin current buffer)
-
-### Session Management
-- **Restore session**: `<leader>qs`
-- **Last session**: `<leader>ql`
-- **Stop saving**: `<leader>qd`
-
-### Modern UI & Notifications (noice.nvim)
-- **Command line**: `:` now opens modern floating command interface
-- **Message history**: `<leader>snh` (show all message history)
-- **All messages**: `<leader>sna` (show all noice messages)
-- **Last message**: `<leader>snl` (show last noice message)
-- **Dismiss messages**: `<leader>snd` (dismiss all messages)
-- **Dismiss notifications**: `<leader>un` (dismiss all nvim-notify notifications)
-- **LSP documentation scroll**: `<C-f>`/`<C-b>` (scroll in hover/signature help)
-- **Enhanced notifications**: Automatic timeout, better positioning, and styling
-- **Command completion**: Modern interface with icons and better visual feedback
-
-
-### Folding Operations
-- **Close fold**: `zc` (close fold under cursor)
-- **Open fold**: `zo` (open fold under cursor)
-- **Toggle fold**: `za` (toggle fold under cursor)
-- **Close all folds**: `zC` (close all folds recursively)
-- **Open all folds**: `zO` (open all folds recursively)
-- **Toggle all folds**: `zA` (toggle all folds recursively)
-- **Enhanced folding**: `zR`/`zM` (ufo.nvim enhanced fold operations)
-- **Debug folding**: `<leader>fD` (show current fold settings)
-
-## Language Server Setup
-
-Comprehensive LSP setup in `lua/vrushabhbayas/plugins/lsp.lua` includes:
-- **TypeScript/JavaScript**: ts_ls server with enhanced import management
-- **ESLint**: With auto-fix on save
-- **JSON**: With schema validation (schemastore integration)
-- **HTML/CSS**: For web development
-- **Emmet**: HTML/JSX completion and snippets (emmet_ls)
-- **Markdown**: Marksman language server for documentation
-- **Bash**: bashls for shell scripting
-- **Lua**: lua_ls with Neovim-specific enhancements
-
-Modern formatting is handled by **conform.nvim** with Prettier, stylua, and other formatters.
-
-## Development Workflow
-
-1. **Opening files**: Use `<leader>ff` for fuzzy finding or `<leader>e` for file explorer
-2. **Editing**: LSP provides completion, diagnostics, and formatting with `<leader>f`
-3. **Testing**: Use `<leader>tn` for nearest test, `<leader>tf` for file tests, or `<leader>tt` for test summary
-4. **Search/Replace**: Use `<leader>S` for project-wide search and replace with live preview
-5. **Git workflow**: Use `<leader>z` for LazyGit or individual git commands
-6. **Diagnostics**: Use `<leader>ld` for floating diagnostics and `K` for hover information
-7. **REST API testing**: Use rest.nvim for HTTP requests with syntax highlighting
-8. **Claude Code integration**: Use `<leader>cc` to open Claude Code for AI assistance and code review
-
-## Key Customizations
-
-- **Leader key**: Space bar
-- **Relative line numbers**: Enabled for easy navigation
-- **Auto-format**: On save for JS/TS/CSS files
-- **Scrolling**: Centered cursor with `<C-d>` and `<C-u>`
-- **Search**: Centered results with `n` and `N`
-- **Clipboard**: System clipboard integration with `<leader>y` and `<leader>Y`
-- **Visual paste**: `<leader>p` (paste without overwriting clipboard)
-- **Tab settings**: 2-space indentation with smart indent
-- **Cursor line**: Current line highlighting enabled
-- **Scrolloff**: 8 lines of context when scrolling
-
-## Theme Management
-
-**Complete theme collection with instant switching** - All 10 themes available in `lua/vrushabhbayas/plugins/themes.lua` with utilities in `lua/vrushabhbayas/utils/themes.lua`:
-
-- **Nightfox** (default) - Professional dark theme with excellent plugin integration
-- **Catppuccin Mocha** - Warm, cozy theme with great readability
-- **Gruvbox** - Retro groove color scheme with hard contrast
-- **Rose Pine Moon** - Natural pine, faux fur and a bit of soho vibes
-- **Tokyo Night** - Clean, dark theme inspired by Tokyo's night (multiple variants)
-- **OneDark** - Atom's iconic One Dark theme
-- **Dracula** - Dark theme with vibrant colors
-- **Everforest** - Green based color scheme designed to be warm and soft
-- **Oceanic Next** - Sublime Text's Oceanic Next theme
-- **Vim One** - Light theme adapted from Atom's One Light
-
-### **Theme Switching Commands:**
-- **`<leader>cs`** - Open theme picker (Telescope interface with live preview)
-- **`<leader>cp`** - Show current theme info
-- **`<leader>cr`** - Switch to random theme
-- **`:Theme <name>`** - Switch to specific theme (with tab completion)
-- **`:Theme`** - List all available themes
-
-### **Theme Features:**
-- **Instant switching** - No restart required
-- **Live preview** - See themes before applying in telescope picker
-- **Persistent storage** - Remembers your choice across sessions
-- **Smart loading** - Only active theme loads (performance optimized)
-- **Professional configurations** - Each theme optimized for your plugin setup
-
-## Professional Configuration Patterns
-
-### **Namespace Organization**
-- Personal namespace `vrushabhbayas` prevents conflicts
-- Clear separation between core config and plugins
-- Modular architecture allows easy customization
-
-### **Modular UI Architecture**
-The UI configuration uses a **modular organization pattern** for maintainability:
-- **`ui.lua`** - Main module loader (18 lines, imports all ui/ modules)
-- **`ui/interface.lua`** - Core interface components (lualine, bufferline, indent-guides)
-- **`ui/files.lua`** - File management tools (neo-tree, oil.nvim)
-- **`ui/messages.lua`** - Messaging system (noice.nvim with custom styling, nvim-notify)
-- **`ui/enhancements.lua`** - UI utilities (icons, colorizer, persistence, dressing)
-
-**Benefits**: Each module focuses on specific functionality, making it easy to find, modify, or extend UI components. The main ui.lua file was reduced from 777 lines to 18 lines for better maintainability.
-
-### **Lazy Loading Strategy**
-- **Event-driven loading**: Plugins load on specific events
-- **Command-based loading**: UI plugins load on first command
-- **Filetype loading**: Language servers load only for relevant files
-- **Key-based loading**: Features load when keybinds are used
-
-### **LSP Architecture**
-- **Unified on_attach**: Consistent keybindings across all servers
-- **Enhanced capabilities**: nvim-cmp integration with LSP
-- **Async formatting**: Non-blocking format operations
-- **Inlay hints**: TypeScript/JavaScript parameter and type hints
-- **Automatic installation**: Mason ensures servers are available
-
-### **Performance Optimizations**
-- **Disabled unused plugins**: Removed default Vim plugins
-- **Lazy loading by default**: Only loads what's needed
-- **Async operations**: Formatting and diagnostics don't block UI
-- **Smart file filtering**: Excludes node_modules, .git from searches
-- **Bytecode compilation**: lazy.nvim compiles for faster startup
-
-### **Development Workflow Integration**
-- **Project-aware configurations**: Different setups for different project types
-- **Modern UI experience**: noice.nvim provides floating command line and enhanced messages
-- **Advanced search capabilities**: nvim-spectre for project-wide find and replace
-- **Git workflow**: Comprehensive git operations and conflict resolution with LazyGit
-- **REST API development**: Built-in HTTP client for testing APIs
-- **Enhanced file management**: Oil.nvim for buffer-like directory editing
-
-## Important Notes
-
-### **Which-key Configuration**
-- **Delay**: Set to 1000ms to prevent conflicts with rapid keystrokes
-- **Expand**: Set to 0 to reduce aggressive partial matching
-- **Group support**: Properly configured for noice (`<leader>sn`) and other plugin groups
-
-### **Command Line Experience**
-With noice.nvim installed, the command line experience is completely modernized:
-- Commands (`:`) appear in floating windows with better styling
-- Enhanced message routing and filtering
-- Better integration with LSP progress and documentation
-- Modern notification system with nvim-notify
-
-## Claude Code Integration Workflow
-
-### **Seamless AI Assistance in Neovim**
-
-This configuration provides integrated Claude Code workflows for AI-powered coding assistance:
-
-### **Quick Start Claude Code Integration:**
-1. **Open Claude Code**: `<leader>cc` - Opens Claude Code in a vertical terminal split (80 columns)
-2. **Copy current file**: `<leader>cf` - Copies entire file with filename to clipboard
-3. **Copy selection**: `<leader>cs` (in visual mode) - Copies selected code with context
-4. **Toggle terminal**: `<leader>cT` - Show/hide Claude Code vertical terminal
-5. **Horizontal option**: `<leader>ch` - Opens Claude Code in horizontal split (15 lines)
-
-### **Optimal Workflow:**
-1. **Code Review**: Select problematic code with visual mode, use `<leader>cs` to copy to clipboard
-2. **Paste to Claude**: Switch to terminal (`<leader>cc`), paste with `<C-v>` 
-3. **Get suggestions**: Ask Claude Code for improvements, refactoring, or debugging help
-4. **Navigate back**: Use `<C-k>` to jump back to your code from terminal
-5. **Apply changes**: Copy Claude's suggestions and apply them to your code
-
-### **Terminal Enhancements for Claude Code:**
-- **Clean interface**: No line numbers, signs, or distractions in Claude terminal
-- **Easy navigation**: `<C-h/j/k/l>` to move between windows without leaving terminal mode
-- **Quick clipboard access**: `<C-v>` to paste clipboard content directly
-- **Smart exit**: `<Esc>` to exit terminal mode cleanly
-
-### **Best Practices:**
-- Use `<leader>cf` to give Claude Code full file context for complex issues
-- Use `<leader>cs` for specific code sections you want reviewed
-- Keep Claude Code terminal open in split for continuous assistance
-- Use `<leader>cT` to quickly show/hide when you need screen space
-
-This integration transforms Claude Code from a separate tool into a seamless coding companion within your Neovim workflow.
+1. **Minimal init.lua**: Bootstrap code is kept minimal with deferred loading
+2. **Disabled builtins**: Unused Vim plugins are disabled in `lazy.lua` config
+3. **Smart search exclusions**: Telescope configured to exclude `node_modules`, `.git`, etc.
+4. **Async operations**: Formatting and diagnostics run asynchronously
+5. **Bytecode compilation**: Lazy.nvim compiles modules for faster startup

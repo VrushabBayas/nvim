@@ -100,8 +100,16 @@ map("n", "<leader>ch", function()
   vim.cmd("split | resize 15 | terminal claude")
 end, { desc = "Open Claude Code in horizontal terminal split" })
 
--- Auto-imports and import management
+-- Import management - Global fallbacks (LSP-specific versions in lsp.lua override these for Python)
+-- These provide import functionality for all languages, while Python gets enhanced versions
 map("n", "<leader>io", function()
+  -- Check if LSP client supports code actions
+  local clients = vim.lsp.get_active_clients({ bufnr = 0 })
+  if #clients == 0 then
+    vim.notify("No LSP client available for import organization", vim.log.levels.WARN)
+    return
+  end
+  
   vim.lsp.buf.code_action({
     filter = function(code_action)
       return code_action.title:match("Organize Imports") or code_action.title:match("Sort Imports")
@@ -111,6 +119,12 @@ map("n", "<leader>io", function()
 end, { desc = "Organize imports" })
 
 map("n", "<leader>ai", function()
+  local clients = vim.lsp.get_active_clients({ bufnr = 0 })
+  if #clients == 0 then
+    vim.notify("No LSP client available for auto-import", vim.log.levels.WARN)
+    return
+  end
+  
   vim.lsp.buf.code_action({
     filter = function(code_action)
       return code_action.title:match("Add missing import") or code_action.title:match("Import") or code_action.title:match("Update import")
@@ -120,6 +134,12 @@ map("n", "<leader>ai", function()
 end, { desc = "Add missing imports" })
 
 map("n", "<leader>ri", function()
+  local clients = vim.lsp.get_active_clients({ bufnr = 0 })
+  if #clients == 0 then
+    vim.notify("No LSP client available for import cleanup", vim.log.levels.WARN)
+    return
+  end
+  
   vim.lsp.buf.code_action({
     filter = function(code_action)
       return code_action.title:match("Remove unused") or code_action.title:match("unused import")
@@ -129,6 +149,12 @@ map("n", "<leader>ri", function()
 end, { desc = "Remove unused imports" })
 
 map("n", "<leader>ui", function()
+  local clients = vim.lsp.get_active_clients({ bufnr = 0 })
+  if #clients == 0 then
+    vim.notify("No LSP client available for import updates", vim.log.levels.WARN)
+    return
+  end
+  
   vim.lsp.buf.code_action({
     filter = function(code_action)
       return code_action.title:match("Update import") or code_action.title:match("Fix import")
@@ -198,17 +224,17 @@ map("n", "<leader>cp", function()
   vim.notify("Current theme: " .. current, vim.log.levels.INFO)
 end, { desc = "Preview current theme" })
 
-map("n", "<leader>cr", function()
-  require("vrushabhbayas.utils.themes").random_theme()
-end, { desc = "Random theme" })
 
--- Additional fold keybindings for debugging and usability
-map("n", "zc", "zc", { desc = "Close fold under cursor" })
-map("n", "zo", "zo", { desc = "Open fold under cursor" })
-map("n", "za", "za", { desc = "Toggle fold under cursor" })
-map("n", "zC", "zC", { desc = "Close all folds under cursor recursively" })
-map("n", "zO", "zO", { desc = "Open all folds under cursor recursively" })
-map("n", "zA", "zA", { desc = "Toggle all folds under cursor recursively" })
+map("n", "<leader>cv", function()
+  require("vrushabhbayas.utils.themes").cycle_variants()
+end, { desc = "Cycle theme variants" })
+
+
+map("n", "<leader>cV", function()
+  require("vrushabhbayas.utils.themes").theme_info()
+end, { desc = "Show theme information and variants" })
+
+-- Folding: Built-in Vim commands work automatically (zc, zo, za, zC, zO, zA, zR, zM)
 
 -- Debug folding status
 map("n", "<leader>fD", function()

@@ -10,12 +10,27 @@ M.themes = {
     display_name = "Nightfox",
     description = "Professional dark theme with excellent plugin integration",
     cmd = "colorscheme nightfox",
+    variants = {
+      nightfox = "colorscheme nightfox",
+      dawnfox = "colorscheme dawnfox",
+      dayfox = "colorscheme dayfox", 
+      duskfox = "colorscheme duskfox",
+      nordfox = "colorscheme nordfox",
+      terafox = "colorscheme terafox",
+      carbonfox = "colorscheme carbonfox",
+    }
   },
   catppuccin = {
     name = "catppuccin",
-    display_name = "Catppuccin Mocha",
+    display_name = "Catppuccin",
     description = "Warm, cozy theme with great readability",
     cmd = "colorscheme catppuccin",
+    variants = {
+      latte = "colorscheme catppuccin-latte",
+      frappe = "colorscheme catppuccin-frappe", 
+      macchiato = "colorscheme catppuccin-macchiato",
+      mocha = "colorscheme catppuccin-mocha",
+    }
   },
   gruvbox = {
     name = "gruvbox",
@@ -25,9 +40,14 @@ M.themes = {
   },
   ["rose-pine"] = {
     name = "rose-pine",
-    display_name = "Rose Pine Moon",
+    display_name = "Rose Pine",
     description = "Natural pine, faux fur and a bit of soho vibes",
     cmd = "colorscheme rose-pine",
+    variants = {
+      main = "colorscheme rose-pine-main",
+      moon = "colorscheme rose-pine-moon",
+      dawn = "colorscheme rose-pine-dawn",
+    }
   },
   tokyonight = {
     name = "tokyonight",
@@ -46,6 +66,15 @@ M.themes = {
     display_name = "OneDark",
     description = "Atom's iconic One Dark theme for Neovim",
     cmd = "colorscheme onedark",
+    variants = {
+      dark = "colorscheme onedark",
+      darker = "colorscheme onedark-darker",
+      cool = "colorscheme onedark-cool", 
+      deep = "colorscheme onedark-deep",
+      warm = "colorscheme onedark-warm",
+      warmer = "colorscheme onedark-warmer",
+      light = "colorscheme onedark-light",
+    }
   },
   dracula = {
     name = "dracula",
@@ -75,18 +104,57 @@ M.themes = {
     end,
   },
   
-  -- New & Emerging Themes 2025
-  obscure = {
-    name = "obscure",
-    display_name = "Obscure",
-    description = "Dark theme with LSP, Tree-sitter support - new 2025",
-    cmd = "colorscheme obscure",
+  -- Trending Themes 2025
+  kanagawa = {
+    name = "kanagawa",
+    display_name = "Kanagawa",
+    description = "Dark theme inspired by Hokusai's famous painting",
+    cmd = "colorscheme kanagawa",
+    variants = {
+      wave = "colorscheme kanagawa-wave",
+      dragon = "colorscheme kanagawa-dragon", 
+      lotus = "colorscheme kanagawa-lotus",
+    }
   },
-  rusty = {
-    name = "rusty",
-    display_name = "Rusty",
-    description = "Tomorrow Night inspired, comfort-focused - new 2025",
-    cmd = "colorscheme rusty",
+  lackluster = {
+    name = "lackluster",
+    display_name = "Lackluster",
+    description = "Monochrome theme that's soft on the eyes",
+    cmd = "colorscheme lackluster",
+    variants = {
+      lackluster = "colorscheme lackluster",
+      hack = "colorscheme lackluster-hack",
+      mint = "colorscheme lackluster-mint",
+    }
+  },
+  vscode = {
+    name = "vscode",
+    display_name = "VSCode",
+    description = "Dark+/Light+ theme from VS Code",
+    cmd = "colorscheme vscode",
+    variants = {
+      dark = "lua require('vscode').setup({}) vim.cmd('colorscheme vscode')",
+      light = "lua require('vscode').setup({}) vim.opt.background='light' vim.cmd('colorscheme vscode')",
+    }
+  },
+  material = {
+    name = "material",
+    display_name = "Material",
+    description = "Google Material Design theme with full plugin support",
+    cmd = "colorscheme material",
+    variants = {
+      darker = "colorscheme material-darker",
+      lighter = "colorscheme material-lighter",
+      oceanic = "colorscheme material-oceanic",
+      palenight = "colorscheme material-palenight",
+      deep_ocean = "colorscheme material-deep-ocean",
+    }
+  },
+  nordic = {
+    name = "nordic",
+    display_name = "Nordic",
+    description = "Warmer, darker variation of Nord",
+    cmd = "colorscheme nordic",
   },
 }
 
@@ -215,6 +283,129 @@ function M.random_theme()
   math.randomseed(os.time())
   local random_theme = available[math.random(#available)]
   M.apply_theme(random_theme)
+end
+
+-- Cycle through theme variants
+function M.cycle_variants()
+  local current = vim.g.colors_name
+  if not current then
+    vim.notify("No theme currently active", vim.log.levels.WARN)
+    return
+  end
+
+  -- Build colorscheme to theme mapping for fast lookup
+  local colorscheme_map = {}
+  for name, theme in pairs(M.themes) do
+    if theme.variants then
+      -- Map base theme
+      local base_scheme = theme.cmd:match("colorscheme (%S+)")
+      if base_scheme then
+        colorscheme_map[base_scheme] = { theme = name, variant = "default", cmd = theme.cmd }
+      end
+      
+      -- Map variants
+      for variant_name, variant_cmd in pairs(theme.variants) do
+        local variant_scheme = variant_cmd:match("colorscheme (%S+)")
+        if variant_scheme then
+          colorscheme_map[variant_scheme] = { theme = name, variant = variant_name, cmd = variant_cmd }
+        end
+      end
+    end
+  end
+
+  -- Find current theme info
+  local current_info = colorscheme_map[current]
+  if not current_info then
+    vim.notify("Current theme has no variants", vim.log.levels.INFO)
+    return
+  end
+
+  -- Build variant list for current theme
+  local theme = M.themes[current_info.theme]
+  local variants = { { name = "default", cmd = theme.cmd } }
+  for variant_name, variant_cmd in pairs(theme.variants) do
+    table.insert(variants, { name = variant_name, cmd = variant_cmd })
+  end
+
+  -- Find current position and cycle to next
+  local current_pos = 1
+  for i, variant in ipairs(variants) do
+    if variant.name == current_info.variant then
+      current_pos = i
+      break
+    end
+  end
+
+  local next_pos = (current_pos % #variants) + 1
+  local next_variant = variants[next_pos]
+
+  pcall(function()
+    vim.cmd(next_variant.cmd)
+  end)
+
+  vim.notify(string.format("Switched to %s (%s)", theme.display_name, next_variant.name), vim.log.levels.INFO)
+end
+
+
+-- Show theme information and available variants
+function M.theme_info()
+  local current = vim.g.colors_name
+  local output = {"🎨 Theme Information:", ""}
+  
+  -- Current theme info
+  table.insert(output, "📍 Current: " .. (current or "none"))
+  
+  -- Find current theme details
+  local current_theme = nil
+  for name, theme in pairs(M.themes) do
+    local base_scheme = theme.cmd:match("colorscheme (%S+)")
+    if base_scheme == current then
+      current_theme = theme
+      table.insert(output, "   Theme: " .. theme.display_name)
+      table.insert(output, "   Description: " .. theme.description)
+      break
+    elseif theme.variants then
+      for variant_name, variant_cmd in pairs(theme.variants) do
+        local variant_scheme = variant_cmd:match("colorscheme (%S+)")
+        if variant_scheme == current then
+          current_theme = theme
+          table.insert(output, "   Theme: " .. theme.display_name .. " (" .. variant_name .. ")")
+          table.insert(output, "   Description: " .. theme.description)
+          break
+        end
+      end
+    end
+    if current_theme then break end
+  end
+  
+  table.insert(output, "")
+  
+  -- Available variants for current theme
+  if current_theme and current_theme.variants then
+    table.insert(output, "🔄 Available variants:")
+    table.insert(output, "  • default")
+    for variant_name, _ in pairs(current_theme.variants) do
+      table.insert(output, "  • " .. variant_name)
+    end
+    table.insert(output, "")
+  end
+  
+  -- All themes with variants
+  table.insert(output, "🎨 All themes with variants:")
+  for name, theme in pairs(M.themes) do
+    if theme.variants then
+      local count = 0
+      for _ in pairs(theme.variants) do count = count + 1 end
+      table.insert(output, "  ▶ " .. theme.display_name .. " (" .. count .. " variants)")
+    end
+  end
+  
+  table.insert(output, "")
+  table.insert(output, "📋 Usage:")
+  table.insert(output, "• <leader>cv - Cycle through variants")
+  table.insert(output, "• <leader>cs - Theme picker")
+  
+  vim.notify(table.concat(output, "\n"), vim.log.levels.INFO)
 end
 
 -- Create telescope picker for themes
