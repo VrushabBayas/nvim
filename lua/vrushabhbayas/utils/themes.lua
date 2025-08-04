@@ -11,6 +11,7 @@ M.themes = {
     description = "Professional dark theme with excellent plugin integration",
     cmd = "colorscheme nightfox",
     variants = {
+      nightfox = "colorscheme nightfox",
       dawnfox = "colorscheme dawnfox",
       dayfox = "colorscheme dayfox", 
       duskfox = "colorscheme duskfox",
@@ -25,6 +26,7 @@ M.themes = {
     description = "Warm, cozy theme with great readability",
     cmd = "colorscheme catppuccin",
     variants = {
+      default = "colorscheme catppuccin",
       latte = "colorscheme catppuccin-latte",
       frappe = "colorscheme catppuccin-frappe", 
       macchiato = "colorscheme catppuccin-macchiato",
@@ -37,7 +39,8 @@ M.themes = {
     description = "Retro groove color scheme with hard contrast",
     cmd = "colorscheme gruvbox",
     variants = {
-      dark = "colorscheme gruvbox",
+      default = "colorscheme gruvbox",
+      dark = "set background=dark | colorscheme gruvbox",
       light = "set background=light | colorscheme gruvbox",
     }
   },
@@ -47,9 +50,10 @@ M.themes = {
     description = "Natural pine, faux fur and a bit of soho vibes",
     cmd = "colorscheme rose-pine",
     variants = {
-      main = "colorscheme rose-pine-main",
-      moon = "colorscheme rose-pine-moon",
-      dawn = "colorscheme rose-pine-dawn",
+      default = "colorscheme rose-pine",
+      main = "lua require('rose-pine').setup({ variant = 'main' }) | colorscheme rose-pine",
+      moon = "lua require('rose-pine').setup({ variant = 'moon' }) | colorscheme rose-pine",
+      dawn = "lua require('rose-pine').setup({ variant = 'dawn' }) | colorscheme rose-pine",
     }
   },
   tokyonight = {
@@ -58,6 +62,7 @@ M.themes = {
     description = "Clean, dark theme inspired by Tokyo's night",
     cmd = "colorscheme tokyonight",
     variants = {
+      default = "colorscheme tokyonight",
       night = "colorscheme tokyonight-night",
       storm = "colorscheme tokyonight-storm",
       moon = "colorscheme tokyonight-moon",
@@ -70,13 +75,8 @@ M.themes = {
     description = "Atom's iconic One Dark theme for Neovim",
     cmd = "colorscheme onedark",
     variants = {
+      default = "colorscheme onedark",
       dark = "colorscheme onedark",
-      darker = "colorscheme onedark-darker",
-      cool = "colorscheme onedark-cool", 
-      deep = "colorscheme onedark-deep",
-      warm = "colorscheme onedark-warm",
-      warmer = "colorscheme onedark-warmer",
-      light = "colorscheme onedark-light",
     }
   },
   dracula = {
@@ -91,6 +91,7 @@ M.themes = {
     description = "Green based color scheme designed to be warm and soft",
     cmd = "colorscheme everforest",
     variants = {
+      default = "colorscheme everforest",
       hard = "let g:everforest_background = 'hard' | colorscheme everforest",
       medium = "let g:everforest_background = 'medium' | colorscheme everforest",
       soft = "let g:everforest_background = 'soft' | colorscheme everforest",
@@ -119,6 +120,7 @@ M.themes = {
     description = "Dark theme inspired by Hokusai's famous painting",
     cmd = "colorscheme kanagawa",
     variants = {
+      default = "colorscheme kanagawa",
       wave = "colorscheme kanagawa-wave",
       dragon = "colorscheme kanagawa-dragon", 
       lotus = "colorscheme kanagawa-lotus",
@@ -130,6 +132,7 @@ M.themes = {
     description = "Monochrome theme that's soft on the eyes",
     cmd = "colorscheme lackluster",
     variants = {
+      default = "colorscheme lackluster",
       hack = "colorscheme lackluster-hack",
       mint = "colorscheme lackluster-mint",
     }
@@ -140,7 +143,8 @@ M.themes = {
     description = "Dark+/Light+ theme from VS Code",
     cmd = "colorscheme vscode",
     variants = {
-      dark = "colorscheme vscode",
+      default = "colorscheme vscode",
+      dark = "set background=dark | colorscheme vscode",
       light = "set background=light | colorscheme vscode",
     }
   },
@@ -150,6 +154,7 @@ M.themes = {
     description = "Google Material Design theme with full plugin support",
     cmd = "colorscheme material",
     variants = {
+      default = "colorscheme material",
       darker = "colorscheme material-darker",
       lighter = "colorscheme material-lighter",
       oceanic = "colorscheme material-oceanic",
@@ -306,7 +311,7 @@ function M.cycle_variants()
   
   for name, theme in pairs(M.themes) do
     -- Check if current matches base theme
-    local base_scheme = theme.cmd:match("colorscheme (%S+)")
+    local base_scheme = theme.cmd:match("colorscheme ([%w-_]+)")
     if base_scheme == current then
       current_theme = theme
       current_variant = "default"
@@ -332,7 +337,7 @@ function M.cycle_variants()
   -- If no theme found with variants, check if it's a theme without variants
   if not current_theme then
     for name, theme in pairs(M.themes) do
-      local base_scheme = theme.cmd:match("colorscheme (%S+)")
+      local base_scheme = theme.cmd:match("colorscheme ([%w-_]+)")
       if base_scheme == current and not theme.variants then
         vim.notify(string.format("%s has no variants to cycle through", theme.display_name), vim.log.levels.INFO)
         return
@@ -348,11 +353,18 @@ function M.cycle_variants()
     return
   end
 
-  -- Build variant list for current theme
-  local variants = { { name = "default", cmd = current_theme.cmd } }
+  -- Build variant list for current theme (variants now include the default)
+  local variants = {}
   for variant_name, variant_cmd in pairs(current_theme.variants) do
     table.insert(variants, { name = variant_name, cmd = variant_cmd })
   end
+  
+  -- Sort variants to ensure consistent order (default first if present)
+  table.sort(variants, function(a, b)
+    if a.name == "default" then return true end
+    if b.name == "default" then return false end
+    return a.name < b.name
+  end)
 
   -- Find current position and cycle to next
   local current_pos = 1
@@ -366,15 +378,26 @@ function M.cycle_variants()
   local next_pos = (current_pos % #variants) + 1
   local next_variant = variants[next_pos]
 
-  -- Execute the variant command
-  local success = pcall(function()
+  -- Execute the variant command with better error handling
+  local success, err = pcall(function()
     vim.cmd(next_variant.cmd)
   end)
 
   if success then
     vim.notify(string.format("Switched to %s (%s)", current_theme.display_name, next_variant.name), vim.log.levels.INFO)
   else
-    vim.notify(string.format("Failed to switch to %s variant", next_variant.name), vim.log.levels.ERROR)
+    vim.notify(string.format("Failed to switch to %s variant: %s", next_variant.name, err or "Unknown error"), vim.log.levels.ERROR)
+    
+    -- Try to fallback to base theme if variant fails
+    local fallback_success = pcall(function()
+      vim.cmd(current_theme.cmd)
+    end)
+    
+    if fallback_success then
+      vim.notify(string.format("Reverted to base %s theme", current_theme.display_name), vim.log.levels.INFO)
+    else
+      vim.notify("Failed to revert to base theme", vim.log.levels.ERROR)
+    end
   end
 end
 
