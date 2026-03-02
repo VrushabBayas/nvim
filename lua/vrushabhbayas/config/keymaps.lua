@@ -9,14 +9,16 @@ local opts = { noremap = true, silent = true }
 
 -- General keymaps
 map("n", "<leader><CR>", function()
-  -- Clear loaded modules to force reload
+  -- Clear loaded config modules to force reload (skip plugins — lazy.nvim manages those)
   for name, _ in pairs(package.loaded) do
-    if name:match("^vrushabhbayas") then
+    if name:match("^vrushabhbayas%.config") then
       package.loaded[name] = nil
     end
   end
-  -- Reload the config
-  vim.cmd("source ~/.config/nvim/init.lua")
+  -- Reload only config modules (NOT init.lua — lazy.nvim doesn't support re-sourcing)
+  require("vrushabhbayas.config.options")
+  require("vrushabhbayas.config.keymaps")
+  require("vrushabhbayas.config.autocmds")
   vim.notify("Config reloaded!", vim.log.levels.INFO)
 end, { desc = "Reload config" })
 map("n", "<leader>w", function() vim.cmd.write() end, { desc = "Save file", silent = true })
@@ -39,7 +41,7 @@ map("v", "<leader>y", '"+y', opts)
 map("v", "<leader>p", '"_dP', opts)
 
 -- Text manipulation
-map("n", "<leader>d", ":t.<CR>", opts)
+map("n", "<leader>D", ":t.<CR>", opts)
 map("n", "<leader>A", "ggVG", opts)
 map("v", "J", ":m '>+1<CR>gv=gv", opts)
 map("v", "K", ":m '<-2<CR>gv=gv", opts)
@@ -54,7 +56,7 @@ map("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 map("n", "<leader>ld", vim.diagnostic.open_float, opts)
 map("n", "[d", vim.diagnostic.goto_prev, opts)
 map("n", "]d", vim.diagnostic.goto_next, opts)
-map("n", "<leader>dl", vim.diagnostic.setloclist, opts)
+map("n", "<leader>xd", vim.diagnostic.setloclist, opts)
 
 -- Development utilities - Console logging
 map("n", "<leader>cl", function()
@@ -212,23 +214,8 @@ map("v", ">", ">gv", opts)
 -- Neo-tree keybindings handled by plugin configuration
 
 -- Telescope keybindings (restored with custom configurations)
-map("n", "<leader>ff", function()
-  require("telescope.builtin").find_files({
-    find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "--exclude", "node_modules", "--exclude", ".git" }
-  })
-end, { desc = "Find files" })
-
-map("n", "<leader>fg", function()
-  require("telescope.builtin").live_grep({
-    additional_args = function()
-      return {
-        "--glob", "!node_modules/**",
-        "--glob", "!.git/**",
-        "--glob", "!package-lock.json"
-      }
-    end,
-  })
-end, { desc = "Live grep" })
+map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Find files" })
+map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Live grep" })
 
 map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Find buffers" })
 map("n", "<C-p>", "<cmd>Telescope git_files<cr>", { desc = "Git files" })

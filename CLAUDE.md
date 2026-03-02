@@ -47,10 +47,28 @@ This is a professional Neovim configuration using Lua with a namespace-organized
 - **Test last**: `<leader>tl` - Re-run last test command
 - **Watch mode**: `<leader>tw` - Watch current file for changes and auto-test
 
+### Console Logging Commands
+- **Console log**: `<leader>cl` - Insert console.log for word under cursor
+- **Console warn**: `<leader>cw` - Insert console.warn for word under cursor
+- **Console error**: `<leader>ce` - Insert console.error for word under cursor
+
 ### Lint and Format Commands
 - **Format current buffer**: `<leader>lf` - Format using conform.nvim
 - **Auto-format on save**: Enabled for supported file types via LSP
-- **Organize imports**: `<leader>io` - Sort and organize imports (TypeScript/JavaScript)
+- **Organize imports**: `<leader>io` - Sort and organize imports (enhanced for Python via LSP)
+- **Add missing imports**: `<leader>ai` - Add missing imports
+- **Remove unused imports**: `<leader>ri` - Remove unused imports
+- **Update imports**: `<leader>ui` - Update/fix imports
+
+### Theme Management Commands
+- **Choose theme**: `<leader>cs` - Open Telescope theme picker with live preview
+- **Preview current theme**: `<leader>cp` - Show current theme information
+- **Cycle theme variants**: `<leader>cv` - Cycle through current theme variants
+- **Theme information**: `<leader>cV` - Show detailed theme info and available variants
+
+### Python Development Commands
+- **Select Python venv**: `<leader>vs` - Select Python virtual environment
+- **Select cached venv**: `<leader>vc` - Select previously cached venv
 
 ## Key Architecture Patterns
 

@@ -121,7 +121,7 @@ return {
       
       -- Copilot navigation keymaps
       vim.keymap.set("i", "<C-H>", "<Plug>(copilot-dismiss)", { desc = "Copilot Dismiss" })
-      vim.keymap.set("i", "<C-L>", "<Plug>(copilot-next)", { desc = "Copilot Next" })
+      vim.keymap.set("i", "<C-]>", "<Plug>(copilot-next)", { desc = "Copilot Next" })
       vim.keymap.set("i", "<C-K>", "<Plug>(copilot-previous)", { desc = "Copilot Previous" })
       vim.keymap.set("i", "<C-\\>", "<Plug>(copilot-suggest)", { desc = "Copilot Suggest" })
     end,

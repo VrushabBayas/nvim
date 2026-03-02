@@ -6,7 +6,6 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope",
-    event = "VeryLazy",
     version = false,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -414,7 +413,11 @@ return {
   {
     "kylechui/nvim-surround",
     version = "*",
-    event = "VeryLazy",
+    keys = {
+      { "ys", desc = "Add surround" },
+      { "ds", desc = "Delete surround" },
+      { "cs", desc = "Change surround" },
+    },
     config = function()
       require("nvim-surround").setup({})
     end,
@@ -423,7 +426,12 @@ return {
   -- Comment toggling
   {
     "numToStr/Comment.nvim",
-    event = "VeryLazy",
+    keys = {
+      { "gcc", mode = "n", desc = "Toggle line comment" },
+      { "gbc", mode = "n", desc = "Toggle block comment" },
+      { "gc", mode = { "n", "v" }, desc = "Comment operator" },
+      { "gb", mode = { "n", "v" }, desc = "Block comment operator" },
+    },
     config = function()
       require("Comment").setup({
         padding = true,
@@ -455,7 +463,6 @@ return {
   -- Enhanced search and navigation
   {
     "folke/flash.nvim",
-    event = "VeryLazy",
     keys = {
       { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
       { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
@@ -642,24 +649,11 @@ return {
     end,
   },
 
-  -- Better Lua development for Neovim
+  -- Better Lua development for Neovim (successor to neodev.nvim)
   {
-    "folke/neodev.nvim",
-    dependencies = { "hrsh7th/nvim-cmp" },
+    "folke/lazydev.nvim",
     ft = "lua",
-    config = function()
-      require("neodev").setup({
-        library = {
-          enabled = true,
-          runtime = true,
-          types = true,
-          plugins = true,
-        },
-        setup_jsonls = true,
-        lspconfig = true,
-        pathStrict = true,
-      })
-    end,
+    opts = {},
   },
 
   -- Autopairs

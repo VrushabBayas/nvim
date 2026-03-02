@@ -37,8 +37,8 @@ vim.opt.shortmess:append("c")
 -- Performance
 vim.opt.updatetime = 250
 vim.opt.timeoutlen = 300
-vim.opt.redrawtime = 10000
-vim.opt.maxmempattern = 20000
+vim.opt.redrawtime = 5000
+vim.opt.maxmempattern = 5000
 
 -- File handling
 vim.opt.swapfile = false
@@ -61,9 +61,5 @@ vim.opt.foldenable = true
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.foldcolumn = '1'
-
--- Enable syntax and filetype detection
-vim.cmd("syntax on")
-vim.cmd("filetype plugin indent on")
 
 -- Performance optimizations handled in init.lua lazy.nvim configuration
