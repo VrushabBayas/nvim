@@ -45,7 +45,8 @@ return {
     config = function()
       require("colorizer").setup({
         filetypes = { "*" },
-        user_default_options = {
+        buftypes = {},
+        parsers = {
           RGB = true,
           RRGGBB = true,
           names = true,
@@ -55,13 +56,15 @@ return {
           hsl_fn = false,
           css = false,
           css_fn = false,
-          mode = "background",
           tailwind = false,
           sass = { enable = false, parsers = { "css" } },
+        },
+        display = {
+          mode = "background",
           virtualtext = "■",
           always_update = false,
         },
-        buftypes = {},
+        hooks = {},
       })
     end,
   },
